@@ -1,0 +1,20 @@
+{
+  "name": "server",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "aoi": "node dist/aoi.js",
+    "dev": "tsx watch src/aoi.ts",
+    "build": "tsc --noEmit && tsdown"
+  },
+  "dependencies": {
+    "dotenv": "^18.0.6",
+    "express": "^5.2.1",
+    "grammy": "^1.46.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "tsdown": "^0.23.0",
+    "tsx": "^4.23.15"
+  }
+}

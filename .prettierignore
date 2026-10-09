@@ -1,0 +1,9 @@
+/*
+!client
+!server
+client/*
+!client/src
+!client/*.config.*
+server/*
+!server/src
+!server/*.config.*

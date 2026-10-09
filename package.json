@@ -1,0 +1,24 @@
+{
+  "name": "aoi",
+  "private": true,
+  "version": "0.0.0",
+  "license": "MIT",
+  "workspaces": ["server", "client"],
+  "scripts": {
+    "dev:client": "npm run dev -w client",
+    "dev:server": "npm run dev -w server",
+    "format": "prettier --write .",
+    "build": "npm run build -ws",
+    "lint": "npm run lint -w client",
+    "aoi": "npm run aoi -w server"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "typescript": "~6.0.2",
+    "prettier": "^3.9.9",
+    "prettier-plugin-multiline-arrays": "^4.1.11"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}
