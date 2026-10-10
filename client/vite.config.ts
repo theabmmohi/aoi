@@ -4,9 +4,8 @@ import react from "@vitejs/plugin-react"
 
 export default defineConfig({
   plugins: [tailwindcss(), react()],
-  resolve: {
-    tsconfigPaths: true
-  },
+  resolve: { tsconfigPaths: true },
+  envDir: "..",
   server: {
     port: 5000,
     proxy: {

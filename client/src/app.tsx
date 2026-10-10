@@ -21,17 +21,6 @@ export default function app() {
   if (!user && !error) View = <></>
   if (user) View = <Main user={user} />
 
-
-
-
-
-
-
-
-
-
-
-  
   if (error) View = error.status === 403 ? <Forbidden error={error} /> : <Login error={error} />
   return (
     <AppLayout>
