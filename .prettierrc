@@ -8,6 +8,9 @@ trailingComma: "none"
 bracketSpacing: true
 arrowParens: "always"
 
-plugins:
-  - "prettier-plugin-multiline-arrays"
-multilineArraysWrapThreshold: 1
+overrides:
+  - files: "server/**"
+    options:
+      plugins:
+        - "prettier-plugin-multiline-arrays"
+      multilineArraysWrapThreshold: 1

@@ -1,10 +1,14 @@
-import type { Request, Response } from "express"
 import { createHmac, timingSafeEqual } from "node:crypto"
+import { Router } from "express"
 import env from "@/env"
 
-export default function Authenticate(request: Request, response: Response) {
-  const { initData } = request.body
-  const params = new URLSearchParams(initData)
+const me = Router()
+
+me.get("/me", (request, response) => {
+  const authHeader = request.header("authorization") ?? ""
+  if (!authHeader) return response.sendStatus(400)
+
+  const params = new URLSearchParams(authHeader.startsWith("tma ") ? authHeader.slice(4) : "")
   const hash = params.get("hash") ?? ""
   params.delete("hash")
 
@@ -26,4 +30,6 @@ export default function Authenticate(request: Request, response: Response) {
   const user = JSON.parse(params.get("user") ?? "{}")
   if (String(user.id) !== env.adminId) return response.sendStatus(403)
   response.json(user)
-}
+})
+
+export default me

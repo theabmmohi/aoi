@@ -1,16 +1,12 @@
 import type { ReactNode } from "react"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar.tsx"
-import { Sun, Moon, Contrast, LogIn, LogOut } from "lucide-react"
 import { useState, useEffect, useCallback } from "react"
+import { Sun, Moon, Contrast } from "lucide-react"
 import { Button } from "@/components/ui/button.tsx"
 import toast, { Toaster } from "@/components/ui/toaster"
 
 type appearances = "light" | "dark" | "system"
-const isAppearance = (value: string | null): value is appearances => [
-    "light",
-    "dark",
-    "system"
-  ].includes(value as appearances)
+const isAppearance = (value: string | null): value is appearances => ["light", "dark", "system"].includes(value as appearances)
 const next: Record<appearances, appearances> = {
   light: "dark",
   dark: "system",
@@ -22,15 +18,9 @@ const icon: Record<appearances, ReactNode> = {
   system: <Contrast />
 }
 
-export default function AppLayout({ children }: { children: ReactNode }) {
-  const [
-    appearance,
-    setAppearanceState
-  ] = useState<appearances>("system")
-  const [
-    sysDark,
-    setSysDark
-  ] = useState<boolean>(false)
+export default function appLayout({ children }: { children: ReactNode }) {
+  const [appearance, setAppearanceState] = useState<appearances>("system")
+  const [sysDark, setSysDark] = useState<boolean>(false)
   useEffect(() => {
     const stored = localStorage.getItem("appearance")
     setAppearanceState(isAppearance(stored) ? stored : "system")
@@ -58,11 +48,6 @@ export default function AppLayout({ children }: { children: ReactNode }) {
     [appearance]
   )
 
-  const [
-    user,
-    setUser
-  ] = useState<boolean>(false)
-
   return (
     <div className="max-w-md m-auto">
       <header className="border-b p-2 sticky top-0 z-999 bg-background flex justify-between select-none">
@@ -74,23 +59,6 @@ export default function AppLayout({ children }: { children: ReactNode }) {
           <h1 className="font-mono text-xl tracking-tight self-center">Aoi</h1>
         </div>
         <div className="flex gap-2.5">
-          {window.Telegram.WebApp.initData ? (
-            <></>
-          ) : (
-            <Button variant={user ? "outline" : "default"} className="self-center min-w-[12ch]" onClick={() => setUser(!user)}>
-              {user ? (
-                <>
-                  <LogOut />
-                  Logout
-                </>
-              ) : (
-                <>
-                  <LogIn />
-                  Login
-                </>
-              )}
-            </Button>
-          )}
           <Button variant="outline" size="icon" className="self-center overflow-hidden" onClick={() => setAppearance(next[appearance])}>
             <span className="relative size-4">
               {(Object.keys(icon) as appearances[]).map((key) => (
