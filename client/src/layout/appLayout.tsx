@@ -73,7 +73,7 @@ export default function appLayout({ children }: { children: ReactNode }) {
           </Button>
         </div>
       </header>
-      <main>{children}</main>
+      <main className="overflow-y-auto">{children}</main>
       <Toaster appearance={appearance} richColors={isDark} />
     </div>
   )
