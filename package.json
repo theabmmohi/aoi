@@ -9,7 +9,6 @@
     "dev:server": "npm run dev -w server",
     "format": "prettier --write .",
     "build": "npm run build -ws",
-    "lint": "npm run lint -w client",
     "aoi": "npm run aoi -w server"
   },
   "devDependencies": {
