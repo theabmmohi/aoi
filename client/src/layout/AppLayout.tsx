@@ -74,7 +74,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
               {(Object.keys(icon) as appearances[]).map((key) => (
                 <span
                   key={key}
-                  className={`absolute inset-0 ${key === appearance ? "translate-y-0 transition-transform duration-300 ease-out" : key === next[appearance] ? "translate-y-[200%]" : "translate-y-[200%] transition-transform duration-300 ease-out"}`}
+                  className={`absolute inset-0 ${key === appearance ? "translate-y-0 transition-transform duration-300 ease-out" : key === next[appearance] ? "-translate-y-[200%]" : "translate-y-[200%] transition-transform duration-300 ease-out"}`}
                 >
                   {icon[key]}
                 </span>
