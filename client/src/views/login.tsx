@@ -1,14 +1,20 @@
 import type { ApiError } from "@/lib/types"
 import { useEffect } from "react"
+import toast from "@/lib/toaster"
+import api from "@/lib/api"
 
 export default function login({ error }: { error: ApiError }) {
   useEffect(() => {
     Object.assign(window, {
       onTelegramAuth: (result: {
-        user?: { id?: number }
+        id_token?: string
         error?: string
       }) => {
-        console.log(result)
+        if (result.error) toast.error(result.error.replace(/_/g, " ").replace(/^./, (letter) => letter.toUpperCase()))
+        if (result.id_token) api.post("/auth/login", { token: result.id_token }).then(({ error }) => {
+          if (error) toast.error(error.message)
+          else window.location.reload()
+        })
       }
     })
     if (!document.getElementById("telegram-login")) {

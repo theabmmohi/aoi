@@ -3,7 +3,7 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar.tsx"
 import { useState, useEffect, useCallback } from "react"
 import { Sun, Moon, Contrast } from "lucide-react"
 import { Button } from "@/components/ui/button.tsx"
-import toast, { Toaster } from "@/components/ui/toaster"
+import toast, { Toaster } from "@/lib/toaster"
 
 type appearances = "light" | "dark" | "system"
 const isAppearance = (value: string | null): value is appearances => ["light", "dark", "system"].includes(value as appearances)
