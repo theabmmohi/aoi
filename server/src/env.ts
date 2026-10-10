@@ -15,6 +15,7 @@ const required = (name: string): string => {
 }
 
 export default {
+  telegramClientSecret: required("TELEGRAM_CLIENT_SECRET"),
   databaseUrl: required("DATABASE_URL"),
   botToken: required("BOT_TOKEN"),
   adminId: required("ADMIN_ID"),

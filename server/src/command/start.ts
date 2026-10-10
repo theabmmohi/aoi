@@ -12,7 +12,7 @@ export default async function start(context: Context) {
           chat_id: context.from?.id,
           menu_button: {
             type: "web_app",
-            text: "Admin",
+            text: "Dash",
             web_app: { url: getHost() }
           }
         })
