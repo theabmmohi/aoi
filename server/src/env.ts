@@ -17,6 +17,7 @@ const required = (name: string): string => {
 export default {
   databaseUrl: required("DATABASE_URL"),
   botToken: required("BOT_TOKEN"),
+  adminId: required("ADMIN_ID"),
   secret: required("SECRET"),
   host: required("HOST"),
   port

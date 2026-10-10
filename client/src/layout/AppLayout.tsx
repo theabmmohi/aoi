@@ -1,8 +1,8 @@
 import type { ReactNode } from "react"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar.tsx"
+import { Sun, Moon, Contrast, LogIn, LogOut } from "lucide-react"
 import { useState, useEffect, useCallback } from "react"
 import { Button } from "@/components/ui/button.tsx"
-import { Sun, Moon, Contrast } from "lucide-react"
 import toast, { Toaster } from "@/components/ui/toaster"
 
 type appearances = "light" | "dark" | "system"
@@ -58,9 +58,14 @@ export default function AppLayout({ children }: { children: ReactNode }) {
     [appearance]
   )
 
+  const [
+    user,
+    setUser
+  ] = useState<boolean>(false)
+
   return (
     <div className="max-w-md m-auto">
-      <header className="border-b p-2 sticky top-0 z-999 bg-background flex justify-between">
+      <header className="border-b p-2 sticky top-0 z-999 bg-background flex justify-between select-none">
         <div className="flex gap-2.5">
           <Avatar size="lg">
             <AvatarImage src="aoi.png" alt="Aoi" />
@@ -68,7 +73,24 @@ export default function AppLayout({ children }: { children: ReactNode }) {
           </Avatar>
           <h1 className="font-mono text-xl tracking-tight self-center">Aoi</h1>
         </div>
-        <div className="flex">
+        <div className="flex gap-2.5">
+          {window.Telegram.WebApp.initData ? (
+            <></>
+          ) : (
+            <Button variant={user ? "outline" : "default"} className="self-center min-w-[12ch]" onClick={() => setUser(!user)}>
+              {user ? (
+                <>
+                  <LogOut />
+                  Logout
+                </>
+              ) : (
+                <>
+                  <LogIn />
+                  Login
+                </>
+              )}
+            </Button>
+          )}
           <Button variant="outline" size="icon" className="self-center overflow-hidden" onClick={() => setAppearance(next[appearance])}>
             <span className="relative size-4">
               {(Object.keys(icon) as appearances[]).map((key) => (
