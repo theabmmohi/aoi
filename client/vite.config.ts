@@ -1,10 +1,6 @@
-import { resolve, dirname } from "node:path"
-import { fileURLToPath } from "node:url"
 import { defineConfig } from "vite"
 import tailwindcss from "@tailwindcss/vite"
 import react from "@vitejs/plugin-react"
-
-const to = (x: string) => resolve(dirname(fileURLToPath(import.meta.url)), x)
 
 export default defineConfig({
   plugins: [
