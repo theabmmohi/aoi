@@ -11,12 +11,10 @@ export default defineConfig({
     tailwindcss(),
     react()
   ],
+  resolve: {
+    tsconfigPaths: true
+  },
   server: {
     port: 5000
-  },
-  resolve: {
-    alias: {
-      "@": to("./src")
-    }
   }
 })
