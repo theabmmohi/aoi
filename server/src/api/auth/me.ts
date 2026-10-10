@@ -4,7 +4,7 @@ import env from "@/env"
 
 const me = Router()
 
-me.get("/me", (request, response) => {
+me.get("/", (request, response) => {
   const authHeader = request.header("authorization") ?? ""
   if (!authHeader) return response.sendStatus(400)
 
