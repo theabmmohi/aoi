@@ -20,8 +20,7 @@ export default function app() {
   let View: ReactNode
   if (!user && !error) View = <></>
   if (user) View = <Main user={user} />
-
-  if (error) View = error.status === 403 ? <Forbidden error={error} /> : <Login error={error} />
+  if (error) View = error.status == 403 ? <Forbidden error={error} /> : <Login error={error} />
   return (
     <AppLayout>
       <Suspense>{View}</Suspense>

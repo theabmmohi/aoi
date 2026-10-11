@@ -6,7 +6,7 @@ export function Toaster({ appearance, richColors = false }: { appearance: "light
     <Sonner
       theme={appearance}
       richColors={richColors}
-      swipeDirections={["top"]}
+      swipeDirections={["top", "bottom"]}
       position="bottom-center"
       toastOptions={{
         duration: 5000

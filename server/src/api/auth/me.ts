@@ -1,12 +1,18 @@
 import { createHmac, timingSafeEqual } from "node:crypto"
 import { Router } from "express"
+import { read } from "@/api/auth/session"
 import env from "@/env"
 
 const me = Router()
 
-me.get("/", (request, response) => {
+me.get("/", async (request, response) => {
   const authHeader = request.header("authorization") ?? ""
-  if (!authHeader) return response.sendStatus(400)
+  if (!authHeader) {
+    const user = await read(request)
+    if (!user) return response.sendStatus(400)
+    if (String(user.id) !== env.adminId) return response.sendStatus(403)
+    return response.json(user)
+  }
 
   const params = new URLSearchParams(authHeader.startsWith("tma ") ? authHeader.slice(4) : "")
   const hash = params.get("hash") ?? ""
