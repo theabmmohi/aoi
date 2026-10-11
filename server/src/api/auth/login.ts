@@ -8,7 +8,7 @@ const keys = createRemoteJWKSet(new URL("https://oauth.telegram.org/.well-known/
 
 login.post("/", async (request, response) => {
   try {
-    const { payload } = await jwtVerify(String(request.body?.id_token ?? ""), keys, {
+    const { payload } = await jwtVerify(String(request.body?.token ?? ""), keys, {
       issuer: "https://oauth.telegram.org",
       audience: env.botToken.split(":")[0] ?? "",
       algorithms: ["RS256"]
