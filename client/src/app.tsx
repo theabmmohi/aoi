@@ -4,7 +4,7 @@ import { Suspense, lazy, useState, useEffect } from "react"
 import AppLayout from "@/layout/appLayout"
 import api from "@/lib/api"
 
-const Main = lazy(() => import("@/views/main"))
+const Dash = lazy(() => import("@/views/dash"))
 const Login = lazy(() => import("@/views/login"))
 const Forbidden = lazy(() => import("@/views/forbidden"))
 
@@ -19,7 +19,7 @@ export default function app() {
   }, [])
   let View: ReactNode
   if (!user && !error) View = <></>
-  if (user) View = <Main user={user} />
+  if (user) View = <Dash user={user} />
   if (error) View = error.status == 403 ? <Forbidden error={error} /> : <Login error={error} />
   return (
     <AppLayout>

@@ -13,10 +13,7 @@ export interface User {
 }
 
 export function issue(user: User): Promise<string> {
-  return new SignJWT({ ...user })
-    .setProtectedHeader({ alg: "HS256" })
-    .setExpirationTime("7d")
-    .sign(key)
+  return new SignJWT({ ...user }).setProtectedHeader({ alg: "HS256" }).setExpirationTime("1h").sign(key)
 }
 
 export async function read(request: Request): Promise<User | null> {

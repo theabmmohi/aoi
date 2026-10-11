@@ -13,9 +13,7 @@ export default function forbidden({ error }: { error: ApiError }) {
         <OctagonMinus size={60} className="text-destructive" />
       </div>
       <p className="font-mono text-center">{error.message}</p>
-      <p className="max-w-xs text-center text-muted-foreground">
-        You dont have access to this resource
-      </p>
+      <p className="max-w-xs text-center text-muted-foreground">You dont have access to this resource</p>
       <Button size="lg" onClick={close}>
         Close
       </Button>
