@@ -1,12 +1,16 @@
 {
   "name": "aoi",
   "private": true,
+  "type": "module",
   "devDependencies": {
-    "@tgcloud/cli": "^0.2.0"
+    "@tgcloud/cli": "^0.2.0",
+    "prettier": "^3.9.10"
   },
   "scripts": {
-    "deploy": "tgcloud push",
+    "format": "prettier --write .",
+    "deploy": "npm run build && tgcloud push",
     "status": "tgcloud status",
+    "build": "npm --prefix client run build",
     "run": "tgcloud run"
   }
 }

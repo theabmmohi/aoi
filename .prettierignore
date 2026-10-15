@@ -1,0 +1,7 @@
+/*
+!client
+!tgcloud
+
+client/*
+!client/src
+!client/*.config.*

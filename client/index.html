@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/aoi.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" />
+    <title>Aoi</title>
+    <script>
+      (() => {
+        try {
+          if (!localStorage.getItem("appearance")) localStorage.setItem("appearance", "system")
+          const sysDark = window.matchMedia('(prefers-color-scheme: dark)').matches
+          const current = localStorage.getItem("appearance")
+          if (current === "dark" || (current === "system" && sysDark)) {
+            document.documentElement.classList.add("dark")
+            const meta = document.querySelector('meta[name="theme-color"]')
+            if (meta) meta.setAttribute("content", "#09090b")
+          }
+        } catch (_) {}
+      })()
+    </script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/eruda"></script>
+    <script>eruda.init()</script>
+  </head>
+  <body>
+    <div id="aoi"></div>
+    <script type="module" src="/src/aoi.tsx"></script>
+  </body>
+</html>
