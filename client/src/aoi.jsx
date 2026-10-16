@@ -1,4 +1,4 @@
-import { createBrowserRouter, useRouteError, redirect } from "react-router"
+import { createBrowserRouter, redirect } from "react-router"
 import { serverlessCall } from "@lib/serverlessCall"
 import { RouterProvider } from "react-router/dom"
 import { createRoot } from "react-dom/client"
@@ -11,18 +11,15 @@ import "@/aoi.css"
 let me
 
 const HydrateFallback = () => <p>Wait a moment</p>
-const ErrorBoundary = () => {
-  const error = useRouteError()
-  return <>
-    <p>An error occurred, kindly refresh the page</p>
-    <br/><code>{error?.message}</code><br/>
-    <pre className="overflow-x-auto">{JSON.stringify(error, null, 2)}</pre>
-  </>
-}
+const ErrorBoundary = () => <p>An error occurred, kindly refresh the page</p>
 const isTelegram = async () => {
   if (!window.Telegram?.WebApp?.initData) throw redirect("/platform-error")
-  me ??= await serverlessCall("me")
-  console.log(me)
+  try {
+    me ??= await serverlessCall("me")
+    console.log(me)
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 const router = createBrowserRouter([
