@@ -81,7 +81,7 @@ export function App() {
           </Button>
         </div>
       </header>
-      <main className="overflow-y-auto">{navigation.state === "loading" ? <p>Loading...</p> : <Outlet />}</main>
+      <main className="overflow-x-auto">{navigation.state === "loading" ? <p>Loading...</p> : <Outlet />}</main>
       <Yozora theme={appearance} tabs={tabs} value={location.pathname} onValueChange={navigate} />
       <Toaster appearance={appearance} richColors={false} />
       {/* <Toaster appearance={appearance} richColors={isDark} /> */}
