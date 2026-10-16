@@ -1,4 +1,9 @@
+import { getSetting, setSetting } from "../lib/settings.js"
 import { api } from "sdk"
+
+const typing = (message) => api.sendChatAction({ action: "typing", chat_id: message.chat.id })
+const name = (message) => [message.from?.first_name, message.from?.last_name].filter(Boolean).join(" ") || "there"
+const say = (message, text) => api.sendMessage({ chat_id: message.chat.id, text })
 
 let me
 
@@ -15,10 +20,28 @@ export default async function (message, ctx) {
   switch (text) {
     case "start": {
       if (inbox) {
-        await api.sendMessage({
+        await typing(message)
+        const owner = await getSetting("owner")
+        if (owner === null) await setSetting("owner", message.chat.id)
+
+        const isOwner = (await getSetting("owner")) === message.chat.id
+        await api.setChatMenuButton({
           chat_id: message.chat.id,
-          text: message.text ?? "(no text)"
+          menu_button: isOwner
+            ? {
+                type: "web_app",
+                text: "Dash",
+                web_app: { url: `https://app${me.id}.tgcloud.ai` }
+              }
+            : {
+                type: "default"
+              }
         })
+        await say(message, isOwner ? `Hello ${name(message)} 👋\nHow are u doing?` : `Hi ${name(message)} 👋 \n\nMost of my commands are for admins, but you can send /info to see your details ✨\n\nIll also echo any text you send me`)
+      }
+      if (group) {
+        await typing(message)
+        await say(message, `Hello everyone 👋\nIm ${me.first_name}, happy to be in ${chat.title}`)
       }
       break
     }

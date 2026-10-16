@@ -1,1 +1,6 @@
-import { table, integer, text } from "sdk/db"
+import { table, text, json } from "sdk/db"
+
+export const settings = table("settings", {
+  key: text("key").primaryKey(),
+  value: json("value")
+})
