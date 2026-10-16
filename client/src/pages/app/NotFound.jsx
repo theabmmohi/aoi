@@ -1,3 +1,3 @@
 export function Component() {
-  return <p>Index</p>
+  return <p>Not Found</p>
 }

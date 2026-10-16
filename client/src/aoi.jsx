@@ -12,13 +12,16 @@ let me
 
 const HydrateFallback = () => <p>Wait a moment</p>
 const ErrorBoundary = () => <p>An error occurred, kindly refresh the page</p>
-const isTelegram = async () => {
+const isTelegram = () => {
   if (!window.Telegram?.WebApp?.initData) throw redirect("/platform-error")
+}
+const isAdmin = async () => {
   try {
     me ??= await serverlessCall("me")
-    console.log(me)
   } catch (error) {
-    console.error(error)
+    if (error.message === "FORBIDDEN") throw redirect("/forbidden")
+    else console.log(error)
+    throw error
   }
 }
 
@@ -29,9 +32,16 @@ const router = createBrowserRouter([
     HydrateFallback
   },
   {
-    middleware: [isTelegram],
+    path: "/forbidden",
+    lazy: () => import("@page/Forbidden"),
+    HydrateFallback
+  },
+  {
+    id: "app",
+    middleware: [isTelegram.isAdmin],
     element: <App />,
     children: routes,
+    loader: () => me,
     HydrateFallback,
     ErrorBoundary
   }
