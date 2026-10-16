@@ -46,7 +46,7 @@ const router = createBrowserRouter([
   },
   {
     id: "app",
-    middleware: [isTelegram.isAdmin],
+    middleware: [isTelegram, isAdmin],
     element: <App />,
     children: routes,
     loader: () => me,
