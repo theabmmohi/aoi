@@ -12,7 +12,7 @@ export default defineConfig({
       "@": path("./src"),
       "@ui": path("./src/components/ui"),
       "@lib": path("./src/lib"),
-      "@page": path("./src/pages"),
+      "@page": path("./src/pages")
     }
   }
 })

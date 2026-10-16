@@ -2,7 +2,9 @@
   "name": "aoi",
   "private": true,
   "type": "module",
-  "workspaces": ["client"],
+  "workspaces": [
+    "client"
+  ],
   "devDependencies": {
     "@tgcloud/cli": "^0.2.0",
     "prettier": "^3.9.10"

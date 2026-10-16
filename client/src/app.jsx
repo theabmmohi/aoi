@@ -69,7 +69,7 @@ export function App() {
         <div className="flex gap-2.5">
           <Button variant="outline" size="icon" className="self-center overflow-hidden" onClick={() => setAppearance(next[appearance])}>
             <span className="relative size-4">
-              {(Object.keys(icon) ).map((key) => (
+              {Object.keys(icon).map((key) => (
                 <span
                   key={key}
                   className={`absolute inset-0 ${key === appearance ? "translate-y-0 transition-transform duration-300 ease-out" : key === next[appearance] ? "-translate-y-[200%]" : "translate-y-[200%] transition-transform duration-300 ease-out"}`}

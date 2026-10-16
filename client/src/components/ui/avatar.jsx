@@ -2,11 +2,7 @@ import * as React from "react"
 import { Avatar as AvatarPrimitive } from "@base-ui/react/avatar"
 import { cn } from "cn"
 
-function Avatar({
-  className,
-  size = "default",
-  ...props
-}) {
+function Avatar({ className, size = "default", ...props }) {
   return (
     <AvatarPrimitive.Root
       data-slot="avatar"
@@ -20,42 +16,15 @@ function Avatar({
   )
 }
 
-function AvatarImage({
-  className,
-  ...props
-}) {
-  return (
-    <AvatarPrimitive.Image
-      data-slot="avatar-image"
-      className={cn(
-        "aspect-square size-full rounded-full object-cover",
-        className
-      )}
-      {...props}
-    />
-  )
+function AvatarImage({ className, ...props }) {
+  return <AvatarPrimitive.Image data-slot="avatar-image" className={cn("aspect-square size-full rounded-full object-cover", className)} {...props} />
 }
 
-function AvatarFallback({
-  className,
-  ...props
-}) {
-  return (
-    <AvatarPrimitive.Fallback
-      data-slot="avatar-fallback"
-      className={cn(
-        "flex size-full items-center justify-center rounded-full bg-muted text-sm text-muted-foreground group-data-[size=sm]/avatar:text-xs",
-        className
-      )}
-      {...props}
-    />
-  )
+function AvatarFallback({ className, ...props }) {
+  return <AvatarPrimitive.Fallback data-slot="avatar-fallback" className={cn("flex size-full items-center justify-center rounded-full bg-muted text-sm text-muted-foreground group-data-[size=sm]/avatar:text-xs", className)} {...props} />
 }
 
-function AvatarBadge({
-  className,
-  ...props
-}) {
+function AvatarBadge({ className, ...props }) {
   return (
     <span
       data-slot="avatar-badge"
@@ -71,26 +40,11 @@ function AvatarBadge({
   )
 }
 
-function AvatarGroup({
-  className,
-  ...props
-}) {
-  return (
-    <div
-      data-slot="avatar-group"
-      className={cn(
-        "group/avatar-group flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background",
-        className
-      )}
-      {...props}
-    />
-  )
+function AvatarGroup({ className, ...props }) {
+  return <div data-slot="avatar-group" className={cn("group/avatar-group flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background", className)} {...props} />
 }
 
-function AvatarGroupCount({
-  className,
-  ...props
-}) {
+function AvatarGroupCount({ className, ...props }) {
   return (
     <div
       data-slot="avatar-group-count"
@@ -103,11 +57,4 @@ function AvatarGroupCount({
   )
 }
 
-export {
-  Avatar,
-  AvatarImage,
-  AvatarFallback,
-  AvatarGroup,
-  AvatarGroupCount,
-  AvatarBadge,
-}
+export { Avatar, AvatarImage, AvatarFallback, AvatarGroup, AvatarGroupCount, AvatarBadge }
