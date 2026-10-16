@@ -1,5 +1,4 @@
-import { createBrowserRouter, useRouteError, redirect } from "react-router"
-import { serverlessCall } from "@lib/serverlessCall"
+import { createBrowserRouter, useRouteError } from "react-router"
 import { RouterProvider } from "react-router/dom"
 import { createRoot } from "react-dom/client"
 import { StrictMode } from "react"

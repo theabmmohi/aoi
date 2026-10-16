@@ -25,13 +25,13 @@ export function App() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const [appearance, setAppearanceState] = useState("system")
-  const [sysDark, setSysDark] = useState(false)
+  const [sysDark, setSysDark] = useState(() => window.matchMedia("(prefers-color-scheme: dark)").matches)
+  const [appearance, setAppearanceState] = useState(() => {
+    const stored = localStorage.getItem("appearance")
+    return isAppearance(stored) ? stored : "system"
+  })
 
   useEffect(() => {
-    const stored = localStorage.getItem("appearance")
-    setAppearanceState(isAppearance(stored) ? stored : "system")
-    setSysDark(window.matchMedia("(prefers-color-scheme: dark)").matches)
     const mql = window.matchMedia("(prefers-color-scheme: dark)")
     const handle = (e) => setSysDark(e.matches)
     mql.addEventListener("change", handle)

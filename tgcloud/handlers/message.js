@@ -15,7 +15,7 @@ export default async function (message) {
   const parsed = /^\/(\w+)(?:@(\w+))?(?:\s+([\s\S]*))?$/.exec(message.text ?? "")
   if (parsed?.[2] && parsed[2].toLowerCase() !== me.username.toLowerCase()) return
   const text = parsed?.[1].toLowerCase() // every command is a text & undefined if plain message !
-  const args = parsed?.[3] ?? ""
+  // const args = parsed?.[3] ?? ""
 
   switch (text) {
     case "start": {
