@@ -1,5 +1,3 @@
-import type { appearances } from "@lib/types"
-import type { ReactNode } from "react"
 import { Outlet, useNavigation, useNavigate, useLocation } from "react-router"
 import { Avatar, AvatarImage, AvatarFallback } from "@ui/avatar"
 import { useState, useEffect, useCallback } from "react"
@@ -10,13 +8,13 @@ import { Yozora } from "yozora"
 import { tabs } from "@/tabs"
 import "@/app.css"
 
-const isAppearance = (value: string | null): value is appearances => ["light", "dark", "system"].includes(value as appearances)
-const next: Record<appearances, appearances> = {
+const isAppearance = (value) => ["light", "dark", "system"].includes(value)
+const next = {
   light: "dark",
   dark: "system",
   system: "light"
 }
-const icon: Record<appearances, ReactNode> = {
+const icon = {
   light: <Sun />,
   dark: <Moon />,
   system: <Contrast />
@@ -27,15 +25,15 @@ export function App() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const [appearance, setAppearanceState] = useState<appearances>("system")
-  const [sysDark, setSysDark] = useState<boolean>(false)
+  const [appearance, setAppearanceState] = useState("system")
+  const [sysDark, setSysDark] = useState(false)
 
   useEffect(() => {
     const stored = localStorage.getItem("appearance")
     setAppearanceState(isAppearance(stored) ? stored : "system")
     setSysDark(window.matchMedia("(prefers-color-scheme: dark)").matches)
     const mql = window.matchMedia("(prefers-color-scheme: dark)")
-    const handle = (e: MediaQueryListEvent) => setSysDark(e.matches)
+    const handle = (e) => setSysDark(e.matches)
     mql.addEventListener("change", handle)
     return () => mql.removeEventListener("change", handle)
   }, [])
@@ -49,7 +47,7 @@ export function App() {
   }, [isDark])
 
   const setAppearance = useCallback(
-    (value: appearances) => {
+    (value) => {
       if (appearance === value) return
       localStorage.setItem("appearance", value)
       setAppearanceState(value)
@@ -71,7 +69,7 @@ export function App() {
         <div className="flex gap-2.5">
           <Button variant="outline" size="icon" className="self-center overflow-hidden" onClick={() => setAppearance(next[appearance])}>
             <span className="relative size-4">
-              {(Object.keys(icon) as appearances[]).map((key) => (
+              {(Object.keys(icon) ).map((key) => (
                 <span
                   key={key}
                   className={`absolute inset-0 ${key === appearance ? "translate-y-0 transition-transform duration-300 ease-out" : key === next[appearance] ? "-translate-y-[200%]" : "translate-y-[200%] transition-transform duration-300 ease-out"}`}

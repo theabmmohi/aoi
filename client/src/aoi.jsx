@@ -25,7 +25,7 @@ const router = createBrowserRouter([
   }
 ])
 
-createRoot(document.getElementById("aoi")!).render(
+createRoot(document.getElementById("aoi")).render(
   <StrictMode>
     <RouterProvider router={router} />
   </StrictMode>

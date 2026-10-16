@@ -1,6 +1,6 @@
 import { Toaster as Sonner, toast } from "sonner"
 
-function Toaster({ appearance, richColors = false }: { appearance: "light" | "dark" | "system"; richColors: boolean }) {
+function Toaster({ appearance, richColors = false }) {
   return (
     <Sonner
       theme={appearance}

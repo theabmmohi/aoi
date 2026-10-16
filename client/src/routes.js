@@ -1,6 +1,4 @@
-import type { RouteObject } from "react-router"
-
-export const routes: RouteObject[] = [
+export const routes = [
   {
     path: "/",
     lazy: () => import("@page/Index")
