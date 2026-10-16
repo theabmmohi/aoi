@@ -25,8 +25,7 @@ export default async function (message) {
         const isOwner = owner === message.chat.id
         await api.setChatMenuButton({
           chat_id: message.chat.id,
-          // menu_button: isOwner
-          menu_button: true
+          menu_button: isOwner
             ? {
                 type: "web_app",
                 text: "Dash",

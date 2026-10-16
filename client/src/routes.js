@@ -1,14 +1,14 @@
 export const routes = [
   {
     path: "/",
-    lazy: () => import("@page/app/Index")
+    lazy: () => import("@page/Index")
   },
   {
     path: "/profile",
-    lazy: () => import("@page/app/Profile")
+    lazy: () => import("@page/Profile")
   },
   {
     path: "*",
-    lazy: () => import("@page/app/NotFound")
+    lazy: () => import("@page/NotFound")
   }
 ]

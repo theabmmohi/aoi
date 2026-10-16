@@ -1,3 +1,3 @@
 export function Component() {
-  return <p>Platform Error</p>
+  return <p>Index</p>
 }

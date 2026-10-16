@@ -8,48 +8,16 @@ import { App } from "@/app"
 import "yozora/styles"
 import "@/aoi.css"
 
-let me
-
-const HydrateFallback = () => {
-  return <p>Wait a moment</p>
-}
-
+const HydrateFallback = () => <p>Wait a moment</p>
 const ErrorBoundary = () => {
-  console.log(useRouteError())
-  return <p>An error occurred, kindly refresh the page</p>
-}
-
-const isTelegram = () => {
-  if (!window.Telegram?.WebApp?.initData) throw redirect("/platform-error")
-}
-
-const isAdmin = async () => {
-  try {
-    me ??= await serverlessCall("me")
-  } catch (error) {
-    if (error.message === "FORBIDDEN") throw redirect("/forbidden")
-    else console.log(error)
-    throw error
-  }
+  const error = useRouteError()
+  return <p>{error ?? "An error occurred, kindly refresh the page"}</p>
 }
 
 const router = createBrowserRouter([
   {
-    path: "/platform-error",
-    lazy: () => import("@page/PlatformError"),
-    HydrateFallback
-  },
-  {
-    path: "/forbidden",
-    lazy: () => import("@page/Forbidden"),
-    HydrateFallback
-  },
-  {
-    id: "app",
-    middleware: [isTelegram, isAdmin],
     element: <App />,
     children: routes,
-    loader: () => me,
     HydrateFallback,
     ErrorBoundary
   }
