@@ -1,8 +1,9 @@
-import { Outlet, useNavigation, useNavigate, useLocation } from "react-router"
-import { Avatar, AvatarImage, AvatarFallback } from "@ui/avatar"
+import { Outlet, useNavigate, useLocation, useLoaderData } from "react-router"
+import { Avatar, AvatarGroup, AvatarImage, AvatarFallback } from "@ui/avatar"
 import { useState, useEffect, useCallback } from "react"
 import { Sun, Moon, Contrast } from "lucide-react"
 import { Toaster, toast } from "@lib/toaster"
+import { Separator } from "@ui/separator"
 import { Button } from "@ui/button"
 import { Yozora } from "yozora"
 import { tabs } from "@/tabs"
@@ -21,9 +22,9 @@ const icon = {
 }
 
 export function App() {
-  const navigation = useNavigation()
   const navigate = useNavigate()
   const location = useLocation()
+  const { me } = useLoaderData()
 
   const [sysDark, setSysDark] = useState(() => window.matchMedia("(prefers-color-scheme: dark)").matches)
   const [appearance, setAppearanceState] = useState(() => {
@@ -57,14 +58,20 @@ export function App() {
   )
 
   return (
-    <div className="max-w-md m-auto">
-      <header className="border-b p-2 sticky top-0 z-999 bg-background flex justify-between select-none">
+    <>
+      <header className="p-2 sticky top-0 z-999 bg-background flex justify-between select-none">
         <div className="flex gap-2.5">
-          <Avatar size="lg">
-            <AvatarImage src="/aoi.png" alt="Aoi" />
-            <AvatarFallback>A</AvatarFallback>
-          </Avatar>
-          <h1 className="font-mono text-xl tracking-tight self-center">Aoi</h1>
+          <AvatarGroup>
+            <Avatar size="lg">
+              <AvatarImage src="/aoi.png" alt="Aoi" />
+              <AvatarFallback>A</AvatarFallback>
+            </Avatar>
+            <Avatar size="lg">
+              <AvatarImage src={me.photo_url} alt="Owner" />
+              <AvatarFallback>O</AvatarFallback>
+            </Avatar>
+          </AvatarGroup>
+          <h1 className="font-mono text-xl tracking-tight self-center">{[me.first_name, me.last_name].filter(Boolean).join(" ") || "Owner"}</h1>
         </div>
         <div className="flex gap-2.5">
           <Button variant="outline" size="icon" className="self-center overflow-hidden" onClick={() => setAppearance(next[appearance])}>
@@ -81,10 +88,13 @@ export function App() {
           </Button>
         </div>
       </header>
-      <main className="overflow-x-auto">{navigation.state === "loading" ? <p>Loading...</p> : <Outlet />}</main>
+      <Separator />
+      <main className="overflow-x-hidden p-5 pb-[calc(5rem+env(safe-area-inset-bottom))]">
+        <Outlet />
+      </main>
       <Yozora theme={appearance} tabs={tabs} value={location.pathname} onValueChange={navigate} />
       <Toaster appearance={appearance} richColors={false} />
       {/* <Toaster appearance={appearance} richColors={isDark} /> */}
-    </div>
+    </>
   )
 }
