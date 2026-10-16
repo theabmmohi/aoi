@@ -2,8 +2,11 @@ import { newSetting } from "../lib/settings.js"
 import { api } from "sdk"
 
 const typing = (message) => api.sendChatAction({ action: "typing", chat_id: message.chat.id })
-const name = (message) => [message.from?.first_name, message.from?.last_name].filter(Boolean).join(" ") || "there"
-const say = (message, text) => api.sendMessage({ chat_id: message.chat.id, text })
+const fullName = (message) => [message.from?.first_name, message.from?.last_name].filter(Boolean).join(" ")
+const name = (message) => fullName(message) || "there"
+const esc = (v) => String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+const val = (v) => (v ? esc(v) : "Unavailable")
+const say = (message, text) => api.sendMessage({ chat_id: message.chat.id, text, parse_mode: "HTML" })
 
 let me
 
@@ -35,11 +38,28 @@ export default async function (message) {
                 type: "default"
               }
         })
-        await say(message, isOwner ? `Hello ${name(message)} 👋\nHow are u doing?` : `Hi ${name(message)} 👋 \n\nMost of my commands are for admins, but you can send /info to see your details ✨\n\nIll also echo any text you send me`)
+        const text = isOwner ? [`Hello ${esc(name(message))} 👋`, `How are u doing?`] : [`Hello ${esc(name(message))} 👋\n`, `Most of my commands are for admins, but you can send /info to see your details ✨\n`, `Ill also echo any text you send me`]
+        await say(message, text.join("\n"))
       }
       if (group) {
         await typing(message)
-        await say(message, `Hello everyone 👋\nIm ${me.first_name}, happy to be in ${message.chat.title}`)
+        const text = [`Hello everyone 👋`, `Im ${esc(me.first_name)}, happy to be in ${esc(message.chat.title)}`]
+        await say(message, text.join("\n"))
+      }
+      break
+    }
+    case "info": {
+      if (inbox) {
+        await typing(message)
+        const { from } = message
+        const text = [`our details 👤`, `Name: ${val(fullName(message))}`, `Username: ${from?.username ? "@" + esc(from.username) : "Unavailable"}`, `Id: <code>${from?.id ?? message.chat.id}</code>`, `Language: ${val(from?.language_code)}`, `Premium: <tg-spoiler>${from?.is_premium ? "Yes" : "No"}</tg-spoiler>`]
+        await say(message, text.join("\n"))
+      }
+      if (group) {
+        await typing(message)
+        const { chat } = message
+        const text = [`Group details 👥`, `Title: ${val(chat.title)}`, `Username: ${chat.username ? "@" + esc(chat.username) : "Unavailable"}`, `Id: <code>${chat.id}</code>`, `Type: ${val(chat.type)}`]
+        await say(message, text.join("\n"))
       }
       break
     }
