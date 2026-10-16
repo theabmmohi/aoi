@@ -1,4 +1,4 @@
-import { getSetting, setSetting } from "../lib/settings.js"
+import { newSetting } from "../lib/settings.js"
 import { api } from "sdk"
 
 const typing = (message) => api.sendChatAction({ action: "typing", chat_id: message.chat.id })
@@ -7,7 +7,7 @@ const say = (message, text) => api.sendMessage({ chat_id: message.chat.id, text 
 
 let me
 
-export default async function (message, ctx) {
+export default async function (message) {
   const inbox = message.chat.type === "private"
   const group = message.chat.type === "group" || message.chat.type === "supergroup"
 
@@ -21,10 +21,8 @@ export default async function (message, ctx) {
     case "start": {
       if (inbox) {
         await typing(message)
-        const owner = await getSetting("owner")
-        if (owner === null) await setSetting("owner", message.chat.id)
-
-        const isOwner = (await getSetting("owner")) === message.chat.id
+        const owner = await newSetting("owner", message.chat.id)
+        const isOwner = owner === message.chat.id
         await api.setChatMenuButton({
           chat_id: message.chat.id,
           menu_button: isOwner
@@ -41,7 +39,7 @@ export default async function (message, ctx) {
       }
       if (group) {
         await typing(message)
-        await say(message, `Hello everyone 👋\nIm ${me.first_name}, happy to be in ${chat.title}`)
+        await say(message, `Hello everyone 👋\nIm ${me.first_name}, happy to be in ${message.chat.title}`)
       }
       break
     }
