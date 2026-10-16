@@ -15,7 +15,13 @@ const router = createBrowserRouter([
     element: <App />,
     children: routes,
     HydrateFallback,
-    ErrorBoundary
+    ErrorBoundary,
+    shouldRevalidate: () => false,
+    loader: async () => {
+      if (!window.Telegram.WebApp) return
+      else {
+      }
+    }
   }
 ])
 

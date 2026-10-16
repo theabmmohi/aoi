@@ -10,6 +10,10 @@ export const routes: RouteObject[] = [
     lazy: () => import("@page/Profile")
   },
   {
+    path: "/platform-error",
+    lazy: () => import("@page/PlatformError")
+  },
+  {
     path: "*",
     lazy: () => import("@page/NotFound")
   }
