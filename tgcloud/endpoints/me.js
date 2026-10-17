@@ -1,4 +1,4 @@
-import { getSetting } from "../lib/settings.js"
+import { getSetting } from "../lib/db/settings.js"
 import { EndpointError } from "sdk"
 
 export default async function (_, ctx) {

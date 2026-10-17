@@ -15,8 +15,7 @@ export const users = table(
     language_code: text("language_code"),
     is_premium: boolean("is_premium").default(false),
     blocked: boolean("blocked").default(false),
-    created_at: integer("created_at", { mode: "timestamp" }).default(sql`(unixepoch())`),
-    last_seen_at: integer("last_seen_at", { mode: "timestamp" }).default(sql`(unixepoch())`)
+    created_at: integer("created_at", { mode: "timestamp" }).default(sql`(unixepoch())`)
   },
   (t) => ({
     usernameIdx: index("idx_users_username").on(t.username)

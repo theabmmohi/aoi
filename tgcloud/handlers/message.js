@@ -1,4 +1,5 @@
-import { newSetting } from "../lib/settings.js"
+import { newSetting } from "../lib/db/settings.js"
+import { setUser } from "../lib/db/users.js"
 import { api } from "sdk"
 
 const typing = (message) => api.sendChatAction({ action: "typing", chat_id: message.chat.id })
@@ -24,6 +25,7 @@ export default async function (message) {
     case "start": {
       if (inbox) {
         await typing(message)
+        await setUser(message.from.id, { ...message.from, blocked: false })
         const owner = await newSetting("owner", message.chat.id)
         const isOwner = owner === message.chat.id
         await api.setChatMenuButton({

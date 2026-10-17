@@ -20,13 +20,12 @@ export async function getUser(id) {
 
 export async function setUser(id, u) {
   const data = pick(u)
-  const last_seen_at = new Date()
   await db
     .insert(users)
-    .values({ id, ...data, last_seen_at })
+    .values({ id, ...data })
     .onConflictDoUpdate({
       target: users.id,
-      set: { ...data, last_seen_at }
+      set: data
     })
     .run()
   return getUser(id)
