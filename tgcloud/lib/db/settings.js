@@ -1,4 +1,4 @@
-import { settings } from "../schema.js"
+import { settings } from "../../schema.js"
 import { eq } from "sdk/db"
 import { db } from "sdk"
 

@@ -1,4 +1,4 @@
-import { users } from "../schema.js"
+import { users } from "../../schema.js"
 import { eq } from "sdk/db"
 import { db } from "sdk"
 
