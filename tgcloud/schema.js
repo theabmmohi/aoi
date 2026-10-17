@@ -12,7 +12,7 @@ export const users = table(
     first_name: text("first_name").notNull(),
     last_name: text("last_name"),
     username: text("username"),
-    language_code: text("language_code"),
+    language_code: text("language_code").deprecated("unused"),
     is_premium: boolean("is_premium").default(false),
     blocked: boolean("blocked").default(false),
     created_at: integer("created_at", { mode: "timestamp" }).default(sql`(unixepoch())`)

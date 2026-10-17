@@ -7,7 +7,6 @@ function pick(u) {
   if ("first_name" in u) data.first_name = u.first_name
   if ("last_name" in u || "first_name" in u) data.last_name = u.last_name ?? null
   if ("username" in u || "first_name" in u) data.username = u.username ?? null
-  if ("language_code" in u || "first_name" in u) data.language_code = u.language_code ?? null
   if ("is_premium" in u || "first_name" in u) data.is_premium = !!u.is_premium
   if ("blocked" in u) data.blocked = !!u.blocked
   return data
