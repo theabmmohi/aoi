@@ -11,16 +11,16 @@ export default authenticate(async ({ action = "all", id, data = {} }) => {
       const rows = await db.select().from(users).all()
       return rows.map((u) => ({ ...u, created_at: u.created_at.getTime() }))
     }
-    case "get": {
-      if (!user) throw new EndpointError("User not found")
-      return { ...user, created_at: user.created_at.getTime() }
-    }
     case "create": {
       if (!id) throw new EndpointError("id is required")
       if (user) throw new EndpointError("User already exists")
       if (!data.first_name) throw new EndpointError("first_name is required")
       const created = await newUser(id, data)
       return { ...created, created_at: created.created_at.getTime() }
+    }
+    case "read": {
+      if (!user) throw new EndpointError("User not found")
+      return { ...user, created_at: user.created_at.getTime() }
     }
     case "update": {
       if (!user) throw new EndpointError("User not found")
