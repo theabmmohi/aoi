@@ -3,7 +3,6 @@ import { Avatar, AvatarGroup, AvatarImage, AvatarFallback } from "@ui/avatar"
 import { useState, useEffect, useCallback } from "react"
 import { Sun, Moon, Contrast } from "lucide-react"
 import { Toaster, toast } from "@lib/toaster"
-import { Separator } from "@ui/separator"
 import { Button } from "@ui/button"
 import { Yozora } from "yozora"
 import { tabs } from "@/tabs"
@@ -59,7 +58,7 @@ export function App() {
 
   return (
     <>
-      <header className="p-2 sticky top-0 z-999 bg-background flex justify-between select-none">
+      <header className="border-b p-2 sticky top-0 z-999 bg-background flex justify-between select-none">
         <div className="flex gap-2.5">
           <AvatarGroup>
             <Avatar size="lg">
@@ -85,7 +84,6 @@ export function App() {
           </Button>
         </div>
       </header>
-      <Separator />
       <main className="overflow-x-hidden p-5 pb-[calc(5rem+env(safe-area-inset-bottom))]">
         <Outlet />
       </main>
