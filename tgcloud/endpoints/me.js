@@ -1,3 +1,3 @@
-import { authenticate } from "../lib/middlewares/auth.js"
+import { authenticate } from "../lib/middleware/auth.js"
 
 export default authenticate(async (_, ctx) => ctx.owner)
