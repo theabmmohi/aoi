@@ -1,5 +1,6 @@
 import { Button as ButtonPrimitive } from "@base-ui/react/button"
 import { cva } from "class-variance-authority"
+import { Spinner } from "@/components/ui/spinner"
 import { cn } from "cn"
 
 const buttonVariants = cva(
@@ -32,8 +33,13 @@ const buttonVariants = cva(
   }
 )
 
-function Button({ className, variant = "default", size = "default", ...props }) {
-  return <ButtonPrimitive data-slot="button" className={cn(buttonVariants({ variant, size, className }))} {...props} />
+function Button({ className, variant = "default", size = "default", processing = false, disabled, children, ...props }) {
+  return (
+    <ButtonPrimitive disabled={processing || disabled} data-slot="button" className={cn(buttonVariants({ variant, size, className }))} {...props}>
+      {processing && <Spinner />}
+      {children}
+    </ButtonPrimitive>
+  )
 }
 
 export { Button, buttonVariants }
