@@ -5,9 +5,9 @@ import { db } from "sdk"
 function filter(data) {
   const user = {}
   if ("first_name" in data) user.first_name = data.first_name ?? "null"
-  if ("last_name" in data) user.last_name = data.last_name ?? null
-  if ("username" in data) user.username = data.username ?? null
-  if ("is_premium" in data) user.is_premium = !!data.is_premium
+  if ("last_name" in data || "first_name" in data) user.last_name = data.last_name ?? null
+  if ("username" in data || "first_name" in data) user.username = data.username ?? null
+  if ("is_premium" in data || "first_name" in data) user.is_premium = !!data.is_premium
   return user
 }
 
