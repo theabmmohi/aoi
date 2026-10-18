@@ -2,7 +2,7 @@ import { columnFilteringFeature, columnVisibilityFeature, createColumnHelper, cr
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@ui/dropdown-menu"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@ui/table"
-import { ArrowUpDown, ChevronDown } from "lucide-react"
+import { ArrowUpDown, ChevronDown, ExternalLink } from "lucide-react"
 import { serverlessCall } from "@lib/serverlessCall"
 import { useLoaderData } from "react-router"
 import { useState } from "react"
@@ -94,13 +94,16 @@ const columns = helper.columns([
     meta: { title: "Username" },
     header: ({ column }) => <SortHeader column={column} />,
     cell: ({ getValue }) => {
-      const url = `https://t.me/${getValue()}`
-      return getValue() ? (
-        <a href={url} target="_blank" rel="noreferrer" onClick={(event) => openProfile(event, url)} className="underline-offset-4 hover:underline">
-          {getValue()}
-        </a>
-      ) : (
-        "-"
+      const username = getValue()
+      if (!username) return "-"
+      const url = `https://t.me/${username}`
+      return (
+        <span className="inline-flex items-center gap-1.5">
+          {username}
+          <a href={url} target="_blank" rel="noreferrer" aria-label={`Open ${username} on Telegram`} onClick={(event) => openProfile(event, url)} className="-m-1 p-1 text-muted-foreground hover:text-foreground">
+            <ExternalLink className="size-3.5" />
+          </a>
+        </span>
       )
     },
     sortFn: "text"
