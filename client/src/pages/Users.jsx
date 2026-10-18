@@ -99,10 +99,10 @@ const columns = helper.columns([
       const url = `https://t.me/${username}`
       return (
         <span className="inline-flex items-center gap-1.5">
-          {username}
           <a href={url} target="_blank" rel="noreferrer" aria-label={`Open ${username} on Telegram`} onClick={(event) => openProfile(event, url)} className="-m-1 p-1 text-muted-foreground hover:text-foreground">
             <ExternalLink className="size-3.5" />
           </a>
+          {username}
         </span>
       )
     },
