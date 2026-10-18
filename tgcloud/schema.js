@@ -1,9 +1,6 @@
 import { table, text, json, integer, boolean, index, sql } from "sdk/db"
 
-export const settings = table("settings", {
-  key: text("key").primaryKey(),
-  value: json("value")
-})
+export const settings = table("settings", { key: text("key").primaryKey(), value: json("value") })
 
 export const users = table(
   "users",
@@ -12,12 +9,10 @@ export const users = table(
     first_name: text("first_name").notNull(),
     last_name: text("last_name"),
     username: text("username"),
-    language_code: text("language_code").deprecated("unused"),
     is_premium: boolean("is_premium").default(false),
-    blocked: boolean("blocked").default(false),
     created_at: integer("created_at", { mode: "timestamp" }).default(sql`(unixepoch())`)
   },
-  (t) => ({
-    usernameIdx: index("idx_users_username").on(t.username)
+  (table) => ({
+    usernameIdx: index("idx_users_username").on(table.username)
   })
 )
