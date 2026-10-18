@@ -26,7 +26,10 @@ const router = createBrowserRouter([
     HydrateFallback,
     ErrorBoundary,
     loader: async () => {
-      const [, me] = await Promise.all([new Promise((res) => setTimeout(res, 2500)), serverlessCall("me")])
+      const [, me] = await Promise.all([
+        new Promise((res) => setTimeout(res, 2500)),
+        serverlessCall("me")
+      ])
       return { me }
     }
   }

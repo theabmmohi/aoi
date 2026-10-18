@@ -133,10 +133,15 @@ const pageSizes = [10, 20, 50].map((n) => ({
   )
 }))
 
-export const loader = () => serverlessCall("users")
+export async function loader() {
+  const [users] = await Promise.all([
+    serverlessCall("users")
+  ])
+  return { users }
+}
 
 export function Component() {
-  const users = useLoaderData()
+  const { users } = useLoaderData()
   const [sorting, setSorting] = useState([])
   const [globalFilter, setGlobalFilter] = useState("")
   const [columnVisibility, setColumnVisibility] = useState({})

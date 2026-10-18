@@ -1,4 +1,4 @@
-import { Home, Users } from "lucide-react"
+import { Home, Users, Settings } from "lucide-react"
 
 export const tabs = [
   {
@@ -10,5 +10,10 @@ export const tabs = [
     id: "/users",
     label: "Users",
     icon: <Users />
+  },
+  {
+    id: "/settings",
+    label: "Settings",
+    icon: <Settings />
   }
 ]
