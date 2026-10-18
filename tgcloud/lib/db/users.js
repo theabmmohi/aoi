@@ -16,7 +16,7 @@ export async function getUser({ id }) {
   return row ?? null
 }
 
-export async function setUser({id, user}) {
+export async function setUser({ id, user }) {
   await db
     .insert(users)
     .values({ id, ...filter(user) })
@@ -25,14 +25,14 @@ export async function setUser({id, user}) {
       set: filter(user)
     })
     .run()
-  return getUser({id})
+  return getUser({ id })
 }
 
-export async function delUser({id}) {
+export async function delUser({ id }) {
   await db.delete(users).where(eq(users.id, id)).run()
 }
 
-export async function newUser({id, user}) {
+export async function newUser({ id, user }) {
   await db
     .insert(users)
     .values({ id, ...filter(user) })
@@ -40,5 +40,5 @@ export async function newUser({id, user}) {
       target: users.id
     })
     .run()
-  return getUser({id})
+  return getUser({ id })
 }

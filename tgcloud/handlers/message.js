@@ -25,8 +25,8 @@ export default async function (message) {
     case "start": {
       if (inbox) {
         await typing(message)
-        await setUser({ id: message.from.id, user: message.from})
-        const owner = await newSetting({ key: "owner", value: message.chat.id})
+        await setUser({ id: message.from.id, user: message.from })
+        const owner = await newSetting({ key: "owner", value: message.chat.id })
         const isOwner = owner === message.chat.id
         await api.setChatMenuButton({
           chat_id: message.chat.id,
