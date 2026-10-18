@@ -4,7 +4,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@ui/table"
 import { ArrowUpDown, ChevronDown } from "lucide-react"
 import { serverlessCall } from "@lib/serverlessCall"
-import { useEffect, useState } from "react"
+import { useLoaderData } from "react-router"
+import { useState } from "react"
 import { Button } from "@ui/button"
 import { Input } from "@ui/input"
 
@@ -21,7 +22,6 @@ const features = tableFeatures({
   sortFns: { alphanumeric: sortFn_alphanumeric, basic: sortFn_basic, text: sortFn_text }
 })
 
-const noUsers = []
 const getRowId = (user) => String(user.id)
 
 const titleOf = (column) => column.columnDef.meta.title
@@ -130,24 +130,19 @@ const pageSizes = [10, 20, 50].map((n) => ({
   )
 }))
 
+export const loader = () => serverlessCall("users")
+
 export function Component() {
-  const [users, setUsers] = useState(null) // null = still loading
-  const [error, setError] = useState(null)
+  const users = useLoaderData()
   const [sorting, setSorting] = useState([])
   const [globalFilter, setGlobalFilter] = useState("")
   const [columnVisibility, setColumnVisibility] = useState({})
   const pageFlip = useChevronFlip()
 
-  useEffect(() => {
-    serverlessCall("users")
-      .then(setUsers)
-      .catch((e) => setError(e.message ?? "Something went wrong"))
-  }, [])
-
   const table = useTable({
     features,
     columns,
-    data: users ?? noUsers,
+    data: users,
     getRowId,
     globalFilterFn: "includesString",
     onSortingChange: setSorting,
@@ -155,9 +150,6 @@ export function Component() {
     onColumnVisibilityChange: setColumnVisibility,
     state: { sorting, globalFilter, columnVisibility }
   })
-
-  if (error) return <p className="p-4 text-destructive">{error}</p>
-  if (!users) return <p className="p-4 text-muted-foreground">Loading...</p>
 
   const { pageIndex, pageSize } = table.state.pagination
 
