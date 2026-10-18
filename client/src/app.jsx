@@ -87,7 +87,7 @@ export function App() {
       <main className="overflow-x-hidden p-5 pb-[calc(5rem+env(safe-area-inset-bottom))]">
         <Outlet />
       </main>
-      <Yozora theme={appearance} tabs={tabs} value={location.pathname} onValueChange={navigate} />
+      <Yozora theme={appearance} tabs={tabs} defaultValue={"/" + location.pathname.split("/")[1]} onValueChange={navigate} />
       <Toaster appearance={appearance} richColors={false} />
       {/* <Toaster appearance={appearance} richColors={isDark} /> */}
     </>

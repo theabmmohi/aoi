@@ -4,7 +4,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@ui/table"
 import { ArrowUpDown, ChevronDown, ExternalLink } from "lucide-react"
 import { serverlessCall } from "@lib/serverlessCall"
-import { useLoaderData } from "react-router"
+import { useRouteLoaderData } from "react-router"
 import { useState } from "react"
 import { Button } from "@ui/button"
 import { Input } from "@ui/input"
@@ -133,13 +133,8 @@ const pageSizes = [10, 20, 50].map((n) => ({
   )
 }))
 
-export async function loader() {
-  const [users] = await Promise.all([serverlessCall("users")])
-  return { users }
-}
-
 export function Component() {
-  const { users } = useLoaderData()
+  const { users } = useRouteLoaderData("app")
   const [sorting, setSorting] = useState([])
   const [globalFilter, setGlobalFilter] = useState("")
   const [columnVisibility, setColumnVisibility] = useState({})

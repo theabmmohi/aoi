@@ -1,12 +1,7 @@
 import { serverlessCall } from "@lib/serverlessCall"
-import { useLoaderData } from "react-router"
-
-export async function loader() {
-  const [settings] = await Promise.all([serverlessCall("settings")])
-  return { settings }
-}
+import { useRouteLoaderData } from "react-router"
 
 export function Component() {
-  const { settings } = useLoaderData()
+  const { settings } = useRouteLoaderData("app")
   return <p>{JSON.stringify(settings, null, 2)}</p>
 }
