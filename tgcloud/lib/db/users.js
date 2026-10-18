@@ -13,7 +13,7 @@ function filter(data) {
 
 export async function getUser({ id }) {
   const row = await db.select().from(users).where(eq(users.id, id)).get()
-  return row ?? null
+  return row
 }
 
 export async function setUser({ id, user }) {

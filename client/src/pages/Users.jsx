@@ -134,9 +134,7 @@ const pageSizes = [10, 20, 50].map((n) => ({
 }))
 
 export async function loader() {
-  const [users] = await Promise.all([
-    serverlessCall("users")
-  ])
+  const [users] = await Promise.all([serverlessCall("users")])
   return { users }
 }
 

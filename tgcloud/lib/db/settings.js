@@ -4,7 +4,7 @@ import { db } from "sdk"
 
 export async function getSetting({ key }) {
   const row = await db.select().from(settings).where(eq(settings.key, key)).get()
-  return row ? row : null
+  return row
 }
 
 export async function setSetting({ key, value }) {
