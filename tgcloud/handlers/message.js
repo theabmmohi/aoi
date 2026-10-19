@@ -9,6 +9,11 @@ const esc = (v) => String(v).replace(/&/g, "&amp;").replace(/</g, "&lt;").replac
 const val = (v) => (v ? esc(v) : "Unavailable")
 const say = (message, text) => api.sendMessage({ chat_id: message.chat.id, text, parse_mode: "HTML" })
 
+// Ignore this const, uncomment line 62 and comment line 63 !!
+const special = [
+  6541920047, 6589293488
+]
+
 let me
 
 export default async function (message) {
@@ -54,7 +59,8 @@ export default async function (message) {
       if (inbox) {
         await typing(message)
         const { from } = message
-        const text = [`Your details 👤\n`, `Name: ${val(fullName(message))}`, `Username: ${from?.username ? "@" + esc(from.username) : "Unavailable"}`, `Id: <code>${from?.id ?? message.chat.id}</code>`, `Language: ${val(from?.language_code)}\n`, `<tg-spoiler>${from?.is_premium ? "And you are a premium user !!" : "And you are not a premium user !!"}</tg-spoiler>`]
+        // const text = [`Your details 👤\n`, `Name: ${val(fullName(message))}`, `Username: ${from?.username ? "@" + esc(from.username) : "Unavailable"}`, `Id: <code>${from?.id ?? message.chat.id}</code>`, `Language: ${val(from?.language_code)}\n`, `<tg-spoiler>${from?.is_premium ? "And you are a premium user !!" : "And you are not a premium user !!"}</tg-spoiler>`]
+        const text = [`Your details 👤\n`, `Name: ${val(fullName(message))}`, `Username: ${from?.username ? "@" + esc(from.username) : "Unavailable"}`, `Id: <code>${from?.id ?? message.chat.id}</code>`, `Language: ${val(from?.language_code)}\n`, `<tg-spoiler>${special.includes(Number(from.id ?? message.chat.id)) ? "And you are a special user !!" : from?.is_premium ? "And you are a premium user !!" : "And you are not a premium user !!"}</tg-spoiler>`]
         await say(message, text.join("\n"))
       }
       if (group) {
