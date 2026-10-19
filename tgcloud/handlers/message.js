@@ -10,9 +10,7 @@ const val = (v) => (v ? esc(v) : "Unavailable")
 const say = (message, text) => api.sendMessage({ chat_id: message.chat.id, text, parse_mode: "HTML" })
 
 // Ignore this const, uncomment line 62 and comment line 63 !!
-const special = [
-  6541920047, 6589293488
-]
+const special = [6541920047, 6589293488]
 
 let me
 

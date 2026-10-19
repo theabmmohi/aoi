@@ -8,7 +8,7 @@ import { App } from "@/app"
 import "yozora/styles"
 import "@/aoi.css"
 
-const HydrateFallback = () => <p>Wait a moment</p>
+const HydrateFallback = () => <></>
 const ErrorBoundary = () => {
   const error = useRouteError()
   return (
