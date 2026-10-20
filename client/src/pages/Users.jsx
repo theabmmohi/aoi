@@ -2,7 +2,7 @@ import { columnFilteringFeature, columnVisibilityFeature, createColumnHelper, cr
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@ui/dropdown-menu"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@ui/table"
-import { ArrowUpDown, ChevronDown, ExternalLink } from "lucide-react"
+import { ArrowUpDown, ChevronsUpDown, ExternalLink } from "lucide-react"
 import { serverlessCall } from "@lib/serverlessCall"
 import { useRouteLoaderData } from "react-router"
 import { useState } from "react"
@@ -35,22 +35,11 @@ function SortHeader({ column }) {
   )
 }
 
-const chevronSpin = "[&_svg]:transition-[rotate] [&_svg]:duration-300 [&_svg]:[rotate:var(--chevron,0deg)] motion-reduce:[&_svg]:transition-none"
-
-function useChevronFlip() {
-  const [angle, setAngle] = useState(0)
-  return {
-    style: { "--chevron": `${angle}deg` },
-    onOpenChange: (open) => setAngle(open ? (Math.random() < 0.5 ? 180 : -180) : 0)
-  }
-}
-
 function ColumnSelect({ table }) {
-  const flip = useChevronFlip()
   return (
-    <DropdownMenu onOpenChange={flip.onOpenChange}>
-      <DropdownMenuTrigger render={<Button variant="outline" className={chevronSpin} style={flip.style} />}>
-        Columns <ChevronDown />
+    <DropdownMenu>
+      <DropdownMenuTrigger render={<Button variant="outline" />}>
+        Columns <ChevronsUpDown />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {table
@@ -71,6 +60,11 @@ function openProfile(event, url) {
   if (!telegram?.openTelegramLink) return
   event.preventDefault()
   telegram.openTelegramLink(url)
+}
+
+function Joined({ value }) {
+  const { settings } = useRouteLoaderData("app")
+  return new Date(value).toLocaleString([], { dateStyle: "medium", timeStyle: "short", timeZone: settings.timezone })
 }
 
 const helper = createColumnHelper()
@@ -111,7 +105,7 @@ const columns = helper.columns([
   helper.accessor("created_at", {
     meta: { title: "Joined" },
     header: ({ column }) => <SortHeader column={column} />,
-    cell: ({ getValue }) => new Date(getValue()).toLocaleString([], { dateStyle: "medium", timeStyle: "short" }),
+    cell: ({ getValue }) => <Joined value={getValue()} />,
     sortFn: "basic",
     enableGlobalFilter: false
   }),
@@ -138,7 +132,6 @@ export function Component() {
   const [sorting, setSorting] = useState([])
   const [globalFilter, setGlobalFilter] = useState("")
   const [columnVisibility, setColumnVisibility] = useState({})
-  const pageFlip = useChevronFlip()
 
   const table = useTable({
     features,
@@ -194,8 +187,8 @@ export function Component() {
       </div>
       <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 text-sm">
         <div className="flex">
-          <Select items={pageSizes} value={String(pageSize)} onValueChange={(value) => table.setPageSize(Number(value))} onOpenChange={pageFlip.onOpenChange}>
-            <SelectTrigger size="sm" aria-label="Rows per page" className={chevronSpin} style={pageFlip.style}>
+          <Select items={pageSizes} value={String(pageSize)} onValueChange={(value) => table.setPageSize(Number(value))}>
+            <SelectTrigger size="sm" aria-label="Rows per page" icon={<ChevronsUpDown className="pointer-events-none size-4 text-muted-foreground" />}>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

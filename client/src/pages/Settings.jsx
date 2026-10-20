@@ -1,10 +1,12 @@
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogMedia, AlertDialogTitle } from "@ui/alert-dialog"
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@ui/dialog"
+import { Combobox, ComboboxContent, ComboboxEmpty, ComboboxInput, ComboboxItem, ComboboxList } from "@ui/combobox"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { useFetcher, useRouteLoaderData } from "react-router"
-import { useCallback, useEffect, useState } from "react"
 import { serverlessCall } from "@lib/serverlessCall"
 import { Field, FieldGroup } from "@ui/field"
 import { TriangleAlert } from "lucide-react"
+import { toast } from "@lib/toaster"
 import { Button } from "@ui/button"
 import { Label } from "@ui/label"
 import { Input } from "@ui/input"
@@ -22,8 +24,56 @@ function useMutation(onDone) {
   }, [fetcher.state, fetcher.data, onDone])
   return {
     busy: fetcher.state !== "idle",
+    pending: fetcher.state !== "idle" ? fetcher.json?.data?.value : undefined,
     run: (operation, data) => fetcher.submit({ operation, data }, { method: "post", action: "/settings", encType: "application/json" })
   }
+}
+
+function offsetOf(zone) {
+  try {
+    return new Intl.DateTimeFormat("en-US", { timeZone: zone, timeZoneName: "shortOffset" }).formatToParts(new Date()).find((part) => part.type === "timeZoneName")?.value ?? ""
+  } catch {
+    return ""
+  }
+}
+
+const label = (zone) => zone.replaceAll("_", " ")
+
+function zoneList(current) {
+  return [...new Set(["UTC", current, ...(Intl.supportedValuesOf?.("timeZone") ?? [])])].sort()
+}
+
+function TimezoneSelect({ value }) {
+  const onDone = useCallback(() => toast.success("Timezone updated."), [])
+  const { busy, run, pending } = useMutation(onDone)
+  const zones = useMemo(() => zoneList(value), [value])
+  const offsets = useMemo(() => Object.fromEntries(zones.map((zone) => [zone, offsetOf(zone)])), [zones])
+
+  return (
+    <Combobox
+      items={zones}
+      value={pending ?? value}
+      disabled={busy}
+      itemToStringLabel={label}
+      onValueChange={(next) => {
+        if (!next || next === value) return
+        run("update", { key: "timezone", value: next })
+      }}
+    >
+      <ComboboxInput placeholder="Search city or region..." aria-label="Timezone" disabled={busy} />
+      <ComboboxContent>
+        <ComboboxEmpty>No timezones found.</ComboboxEmpty>
+        <ComboboxList>
+          {(zone) => (
+            <ComboboxItem key={zone} value={zone}>
+              {label(zone)}
+              <span className="ml-auto font-mono text-xs text-muted-foreground">{offsets[zone]}</span>
+            </ComboboxItem>
+          )}
+        </ComboboxList>
+      </ComboboxContent>
+    </Combobox>
+  )
 }
 
 function TransferDialog({ open, owner, onClose }) {
@@ -90,7 +140,7 @@ function TransferDialog({ open, owner, onClose }) {
 
 export function Component() {
   const { me, settings } = useRouteLoaderData("app")
-  const owner = settings.find((setting) => setting.key === "owner")?.value
+  const { owner, timezone } = settings
   const [transfer, setTransfer] = useState({ open: false, n: 0 })
   const closeTransfer = useCallback(() => setTransfer((t) => (t.open ? { ...t, open: false } : t)), [])
 
@@ -105,6 +155,13 @@ export function Component() {
         <Button variant="destructive" size="sm" onClick={() => setTransfer((t) => ({ open: true, n: t.n + 1 }))}>
           Transfer ownership
         </Button>
+      </section>
+      <section className="grid gap-2 rounded-xl border p-3">
+        <div>
+          <p className="text-xs text-muted-foreground">Timezone</p>
+          <p className="text-sm text-muted-foreground">Dates and times in the dashboard use this zone.</p>
+        </div>
+        <TimezoneSelect value={timezone} />
       </section>
       {transfer.n > 0 && <TransferDialog key={transfer.n} open={transfer.open} owner={owner} onClose={closeTransfer} />}
     </div>
