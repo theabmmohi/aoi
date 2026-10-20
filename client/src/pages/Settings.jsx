@@ -38,10 +38,7 @@ function offsetOf(zone) {
 }
 
 const label = (zone) => zone.replaceAll("_", " ")
-
-function zoneList(current) {
-  return [...new Set(["UTC", current, ...(Intl.supportedValuesOf?.("timeZone") ?? [])])].sort()
-}
+const zoneList = (current) => [...new Set(["UTC", current, ...(Intl.supportedValuesOf?.("timeZone") ?? [])])].sort()
 
 function TimezoneSelect({ value }) {
   const onDone = useCallback(() => toast.success("Timezone updated."), [])
@@ -60,7 +57,15 @@ function TimezoneSelect({ value }) {
         run("update", { key: "timezone", value: next })
       }}
     >
-      <ComboboxInput placeholder="Search city or region..." aria-label="Timezone" disabled={busy} />
+      <ComboboxInput
+        placeholder="Search city or region..."
+        aria-label="Timezone"
+        disabled={busy}
+        onFocus={(event) => {
+          const field = event.currentTarget
+          requestAnimationFrame(() => field.select())
+        }}
+      />
       <ComboboxContent>
         <ComboboxEmpty>No timezones found.</ComboboxEmpty>
         <ComboboxList>

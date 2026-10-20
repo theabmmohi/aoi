@@ -104,7 +104,11 @@ const columns = helper.columns([
   helper.accessor("created_at", {
     meta: { title: "Joined" },
     header: ({ column }) => <SortHeader column={column} />,
-    cell: ({ getValue }) => <span className="font-mono"><Joined value={getValue()} /></span>,
+    cell: ({ getValue }) => (
+      <span className="font-mono">
+        <Joined value={getValue()} />
+      </span>
+    ),
     sortFn: "basic",
     enableGlobalFilter: false
   }),
