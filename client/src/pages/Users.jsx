@@ -5,9 +5,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { ArrowUpDown, ChevronsUpDown, ExternalLink } from "lucide-react"
 import { serverlessCall } from "@lib/serverlessCall"
 import { useRouteLoaderData } from "react-router"
-import { useState } from "react"
 import { Button } from "@ui/button"
 import { Input } from "@ui/input"
+import { useState } from "react"
 
 const features = tableFeatures({
   columnFilteringFeature,
@@ -23,7 +23,6 @@ const features = tableFeatures({
 })
 
 const getRowId = (user) => String(user.id)
-
 const titleOf = (column) => column.columnDef.meta.title
 
 function SortHeader({ column }) {
@@ -64,7 +63,7 @@ function openProfile(event, url) {
 
 function Joined({ value }) {
   const { settings } = useRouteLoaderData("app")
-  return new Date(value).toLocaleString([], { dateStyle: "medium", timeStyle: "short", timeZone: settings.timezone })
+  return new Date(value).toLocaleString([], { dateStyle: "medium", timeStyle: "short", hour12: true, timeZone: settings.timezone })
 }
 
 const helper = createColumnHelper()
@@ -105,7 +104,7 @@ const columns = helper.columns([
   helper.accessor("created_at", {
     meta: { title: "Joined" },
     header: ({ column }) => <SortHeader column={column} />,
-    cell: ({ getValue }) => <Joined value={getValue()} />,
+    cell: ({ getValue }) => <span className="font-mono"><Joined value={getValue()} /></span>,
     sortFn: "basic",
     enableGlobalFilter: false
   }),
