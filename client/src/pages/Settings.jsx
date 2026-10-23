@@ -82,7 +82,11 @@ function TimezoneSelect({ value }) {
 }
 
 function TransferDialog({ open, owner, onClose }) {
-  const { busy, run } = useMutation(onClose)
+  const onDone = useCallback(() => {
+    onClose()
+    window.Telegram?.WebApp?.close()
+  }, [onClose])
+  const { busy, run } = useMutation(onDone)
   const [step, setStep] = useState("id")
   const [id, setId] = useState("")
 
