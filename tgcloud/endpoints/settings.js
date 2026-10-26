@@ -1,18 +1,36 @@
 import { authenticate } from "../lib/middleware/auth.js"
 import { setSetting } from "../lib/db/settings.js"
 import { settings } from "../schema.js"
-import { EndpointError } from "sdk"
-import { db } from "sdk"
+import { api, db } from "sdk"
 
 const DEFAULTS = {
   timezone: "UTC"
 }
 
-export default authenticate(async (input) => {
+let me
+
+export default authenticate(async (input, ctx) => {
   const { operation, data } = input
   switch (operation) {
     case "update": {
-      const res = setSetting(data)
+      const res = await setSetting(data)
+      if (data.key === "owner") {
+        me ??= await api.getMe()
+        await Promise.allSettled([
+          api.setChatMenuButton({
+            chat_id: ctx.admin.id,
+            menu_button: { type: "default" }
+          }),
+          api.setChatMenuButton({
+            chat_id: data.value,
+            menu_button: {
+              type: "web_app",
+              text: "Dash",
+              web_app: { url: `https://app${me.id}.tgcloud.ai` }
+            }
+          })
+        ])
+      }
       return res
       break
     }
