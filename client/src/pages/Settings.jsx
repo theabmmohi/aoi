@@ -14,6 +14,7 @@ import { Input } from "@ui/input"
 export async function action({ request }) {
   const { operation, data } = await request.json()
   await serverlessCall("settings", { operation, data })
+  if (operation === "update" && data.key === "owner") window.Telegram?.WebApp?.close()
   return { ok: true }
 }
 
