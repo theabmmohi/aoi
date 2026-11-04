@@ -11,7 +11,6 @@ let me
 
 export default authenticate(async (input, ctx) => {
   const { operation, data } = input
-  console.log("ctx: ", ctx)
   switch (operation) {
     case "update": {
       const res = await setSetting(data)
