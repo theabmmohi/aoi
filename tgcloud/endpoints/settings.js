@@ -11,6 +11,7 @@ let me
 
 export default authenticate(async (input, ctx) => {
   const { operation, data } = input
+  console.log("ctx: ", ctx)
   switch (operation) {
     case "update": {
       const res = await setSetting(data)
@@ -18,7 +19,7 @@ export default authenticate(async (input, ctx) => {
         me ??= await api.getMe()
         await Promise.allSettled([
           api.setChatMenuButton({
-            chat_id: ctx.admin.id,
+            chat_id: ctx.owner.id,
             menu_button: { type: "default" }
           }),
           api.setChatMenuButton({
