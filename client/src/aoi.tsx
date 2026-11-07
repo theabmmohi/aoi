@@ -4,9 +4,10 @@ import { StrictMode } from "react"
 
 import { HydrateFallback } from "@/router/HydrateFallback"
 import { ErrorBoundary } from "@/router/ErrorBoundary"
+import { useUser, type User } from "@/stores/user"
+import { serverless } from "@/utils/serverless"
 import { Layout } from "@/router/Layout"
 import { routes } from "@/router/routes"
-import { useUser } from "@/stores/user"
 import "yozora/styles"
 import "@/aoi.css"
 
@@ -17,13 +18,9 @@ const router = createBrowserRouter([
     HydrateFallback,
     ErrorBoundary,
     loader: async () => {
-      useUser.setState({
-        user: {
-          id: 1234,
-          first_name: "Im",
-          photo_url: ""
-        }
-      })
+      const {data: user, error} = await serverless<User>({name: "user"})
+      if (error) throw error
+      useUser.setState({ user })
       return null
     }
   }
