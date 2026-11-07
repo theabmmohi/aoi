@@ -1,9 +1,9 @@
+import { Avatar, AvatarGroup, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Outlet, useNavigate, useLocation, useLoaderData } from "react-router"
-import { Avatar, AvatarGroup, AvatarImage, AvatarFallback } from "@ui/avatar"
 import { useState, useEffect, useCallback } from "react"
 import { Sun, Moon, Contrast } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import { Toaster, toast } from "@lib/toaster"
-import { Button } from "@ui/button"
 import { Yozora } from "yozora"
 import { tabs } from "@/tabs"
 import "@/app.css"
@@ -88,8 +88,7 @@ export function App() {
         <Outlet />
       </main>
       <Yozora theme={appearance} tabs={tabs} defaultValue={"/" + location.pathname.split("/")[1]} onValueChange={navigate} />
-      <Toaster appearance={appearance} richColors={false} />
-      {/* <Toaster appearance={appearance} richColors={isDark} /> */}
+      <Toaster appearance={appearance} />
     </>
   )
 }

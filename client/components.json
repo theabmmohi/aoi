@@ -2,11 +2,11 @@
   "$schema": "https://ui.shadcn.com/schema.json",
   "style": "base-maia",
   "rsc": false,
-  "tsx": false,
+  "tsx": true,
   "tailwind": {
     "config": "",
-    "css": "src/aoi.css",
-    "baseColor": "zinc",
+    "css": "src/main.css",
+    "baseColor": "neutral",
     "cssVariables": true,
     "prefix": ""
   },
@@ -19,7 +19,7 @@
     "lib": "@/lib",
     "hooks": "@/hooks"
   },
-  "menuColor": "inverted-translucent",
+  "menuColor": "default-translucent",
   "menuAccent": "subtle",
   "registries": {}
 }
