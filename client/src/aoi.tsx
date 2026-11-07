@@ -6,22 +6,28 @@ import { HydrateFallback } from "@/router/HydrateFallback"
 import { ErrorBoundary } from "@/router/ErrorBoundary"
 import { Layout } from "@/router/Layout"
 import { routes } from "@/router/routes"
-import "@/main.css"
+import { useUser } from "@/stores/user"
+import "yozora/styles"
+import "@/aoi.css"
 
 const router = createBrowserRouter([
   {
-    id: "teadesk",
     element: <Layout />,
     children: routes,
     HydrateFallback,
     ErrorBoundary,
     loader: async () => {
+      useUser.setState({user: {
+        id:1234,
+        first_name: "Im",
+        photo_url: ""
+      }})
       return null
     }
   }
 ])
 
-createRoot(document.getElementById("teadesk")!).render(
+createRoot(document.getElementById("aoi")!).render(
   <StrictMode>
     <RouterProvider router={router} />
   </StrictMode>

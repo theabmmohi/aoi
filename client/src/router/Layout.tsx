@@ -1,39 +1,44 @@
 import { Avatar, AvatarGroup, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { Outlet, useNavigate, useLocation, useLoaderData } from "react-router"
+import { Outlet, useNavigate, useLocation } from "react-router"
 import { useState, useEffect, useCallback } from "react"
 import { Sun, Moon, Contrast } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Toaster, toast } from "@lib/toaster"
+import { useUser } from "@/stores/user"
+import { tabs } from "@/router/tabs"
+import { Toaster } from "sonner"
 import { Yozora } from "yozora"
-import { tabs } from "@/tabs"
-import "@/app.css"
 
-const isAppearance = (value) => ["light", "dark", "system"].includes(value)
-const next = {
+type Appearance = "dark" | "light" | "system"
+
+const appearances: Appearance[] = ["dark", "light", "system"]
+const isAppearance = (value: string | null): value is Appearance => appearances.includes(value as Appearance)
+const next: Record<Appearance, Appearance> = {
   light: "dark",
   dark: "system",
   system: "light"
 }
-const icon = {
+const icon: Record<Appearance, React.ReactNode> = {
   light: <Sun />,
   dark: <Moon />,
   system: <Contrast />
 }
 
-export function App() {
+export function Layout() {
   const navigate = useNavigate()
   const location = useLocation()
-  const { me } = useLoaderData()
+  const user = useUser((s) => s.user)
+
+  if (!user) throw new Error("User is not available in store.")
 
   const [sysDark, setSysDark] = useState(() => window.matchMedia("(prefers-color-scheme: dark)").matches)
-  const [appearance, setAppearanceState] = useState(() => {
+  const [appearance, setAppearanceState] = useState<Appearance>(() => {
     const stored = localStorage.getItem("appearance")
     return isAppearance(stored) ? stored : "system"
   })
 
   useEffect(() => {
     const mql = window.matchMedia("(prefers-color-scheme: dark)")
-    const handle = (e) => setSysDark(e.matches)
+    const handle = (e: MediaQueryListEvent) => setSysDark(e.matches)
     mql.addEventListener("change", handle)
     return () => mql.removeEventListener("change", handle)
   }, [])
@@ -47,11 +52,10 @@ export function App() {
   }, [isDark])
 
   const setAppearance = useCallback(
-    (value) => {
+    (value: Appearance) => {
       if (appearance === value) return
       localStorage.setItem("appearance", value)
       setAppearanceState(value)
-      toast.success(`Appearance switched to ${value}.`)
     },
     [appearance]
   )
@@ -66,16 +70,16 @@ export function App() {
               <AvatarFallback>A</AvatarFallback>
             </Avatar>
             <Avatar size="lg">
-              <AvatarImage src={me.photo_url} alt="Owner" />
-              <AvatarFallback>O</AvatarFallback>
+              <AvatarImage src={user.photo_url} alt="Owner" />
+              <AvatarFallback>{[user.first_name, user.last_name].map((name) => name?.charAt(0).toUpperCase()).join("")}</AvatarFallback>
             </Avatar>
           </AvatarGroup>
-          <h1 className="font-mono text-xl tracking-tight self-center">{[me.first_name, me.last_name].filter(Boolean).join(" ") || "Owner"}</h1>
+          <h1 className="font-mono text-xl tracking-tight self-center">{[user.first_name, user.last_name].filter(Boolean).join(" ") || "Owner"}</h1>
         </div>
         <div className="flex gap-2.5">
           <Button variant="outline" size="icon" className="self-center overflow-hidden" onClick={() => setAppearance(next[appearance])}>
             <span className="relative size-4">
-              {Object.keys(icon).map((key) => (
+              {appearances.map((key) => (
                 <span key={key} className={`absolute inset-0 ${key === appearance ? "translate-y-0 transition-transform duration-300 ease-out" : key === next[appearance] ? "-translate-y-[200%]" : "translate-y-[200%] transition-transform duration-300 ease-out"}`}>
                   {icon[key]}
                 </span>
@@ -87,8 +91,8 @@ export function App() {
       <main className="overflow-x-hidden p-5 pb-[calc(5rem+env(safe-area-inset-bottom))]">
         <Outlet />
       </main>
-      <Yozora theme={appearance} tabs={tabs} defaultValue={"/" + location.pathname.split("/")[1]} onValueChange={navigate} />
-      <Toaster appearance={appearance} />
+      <Yozora theme={appearance} tabs={tabs} defaultValue={"/" + location.pathname.split("/")[1]} onValueChange={(path) => navigate(path)} />
+      <Toaster theme={appearance} position="top-center" />
     </>
   )
 }
