@@ -17,11 +17,13 @@ const router = createBrowserRouter([
     HydrateFallback,
     ErrorBoundary,
     loader: async () => {
-      useUser.setState({user: {
-        id:1234,
-        first_name: "Im",
-        photo_url: ""
-      }})
+      useUser.setState({
+        user: {
+          id: 1234,
+          first_name: "Im",
+          photo_url: ""
+        }
+      })
       return null
     }
   }

@@ -3,11 +3,6 @@
   "private": true,
   "type": "module",
   "devDependencies": {
-    "@tgcloud/cli": "^0.2.0",
-    "prettier": "^3.9.10"
-  },
-  "scripts": {
-    "deploy": "npm run build && tgcloud push",
-    "format": "prettier --write ."
+    "@tgcloud/cli": "^0.2.0"
   }
 }
