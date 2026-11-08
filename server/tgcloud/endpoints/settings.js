@@ -1,5 +1,4 @@
 import { authenticate } from "../lib/middleware/auth.js"
-import { setSetting } from "../lib/db/settings.js"
 import { settings } from "../schema.js"
 import { api, db } from "sdk"
 
@@ -13,7 +12,13 @@ export default authenticate(async (input, ctx) => {
   const { operation, data } = input
   switch (operation) {
     case "update": {
-      const res = await setSetting(data)
+      const { key, value } = data
+      if (!Object.hasOwn(validate, key)) throw new EndpointError("Unknown setting.")
+      validate[key](value)
+
+      await db.insert(settings).values({ key, value }).onConflictDoUpdate({ target: settings.key, set: { value } }).run()
+      const res = await db.select().from(settings).where(eq(settings.key, key)).get()
+
       if (data.key === "owner") {
         me ??= await api.getMe()
         await Promise.allSettled([
@@ -32,12 +37,10 @@ export default authenticate(async (input, ctx) => {
         ])
       }
       return res
-      break
     }
     default: {
       const rows = await db.select().from(settings).all()
       return { ...DEFAULTS, ...Object.fromEntries(rows.map((row) => [row.key, row.value])) }
-      break
     }
   }
 })

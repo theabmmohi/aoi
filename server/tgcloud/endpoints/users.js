@@ -1,4 +1,4 @@
-import { authenticate } from "../lib/middleware/auth.js"
+import { authenticate } from "../lib/endpoints/auth.js"
 import { users } from "../schema.js"
 import { desc } from "sdk/db"
 import { db } from "sdk"
