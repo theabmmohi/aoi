@@ -20,7 +20,6 @@ const validate = {
   },
   async owner(value) {
     if (!Number.isSafeInteger(value) || value <= 0) throw new EndpointError("Invalid owner id.")
-    if (key === "owner" && value === ctx.owner.id) throw new EndpointError("You already own this dashboard.")
     const known = await db.select().from(users).where(eq(users.id, value)).get()
     if (!known) throw new EndpointError("That user has not started the bot.")
   }
@@ -32,6 +31,7 @@ export default authenticate(async (input, ctx) => {
     case "update": {
       const { key, value } = data ?? {}
       if (!Object.hasOwn(validate, key)) throw new EndpointError("Unknown setting.")
+      if (key === "owner" && value === ctx.owner.id) throw new EndpointError("You already own this dashboard.")
       await validate[key](value)
 
       await db.insert(settings).values({ key, value }).onConflictDoUpdate({ target: settings.key, set: { value } }).run()
@@ -45,7 +45,7 @@ export default authenticate(async (input, ctx) => {
             chat_id: ctx.owner.id,
             menu_button: { type: "default" }
           }),
-             api.sendMessage({ chat_id: value, text: "You are now the owner of this dashboard. Tap Dash to open it." }),
+          api.sendMessage({ chat_id: value, text: "You are now the owner of this dashboard. Tap Dash to open it." }),
           api.setChatMenuButton({
             chat_id: value,
             menu_button: {
