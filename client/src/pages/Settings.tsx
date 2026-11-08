@@ -13,8 +13,9 @@ export function Component() {
   const [transferring, setTransferring] = useState(false)
 
   async function transfer() {
-    setTransferring(true)
+    if (!/^\d+$/.test(newOwner)) return toast.error("Enter a valid Telegram ID.")
     try {
+      setTransferring(true)
       if (!(await confirm(`Transfer ownership to ${newOwner}?`))) return toast.error("Transfer cancelled.")
       const { error } = await serverless({ name: "settings", input: { operation: "update", data: { key: "owner", value: Number(newOwner) } } })
       if (error) return toast.error(error.message ?? "Transfer failed.")
