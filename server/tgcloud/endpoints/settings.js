@@ -1,25 +1,40 @@
-import { authenticate } from "../lib/middleware/auth.js"
+import { authenticate } from "../lib/endpoints/auth.js"
+import { api, db, EndpointError } from "sdk"
 import { settings } from "../schema.js"
-import { api, db } from "sdk"
+import { eq } from "sdk/db"
+
+let me
 
 const DEFAULTS = {
   timezone: "UTC"
 }
 
-let me
+const validate = {
+  timezone(value) {
+    if (typeof value !== "string") throw new EndpointError("Invalid timezone.")
+    try {
+      new Intl.DateTimeFormat(undefined, { timeZone: value })
+    } catch {
+      throw new EndpointError("Invalid timezone.")
+    }
+  },
+  owner(value) {
+    if (!Number.isSafeInteger(value) || value <= 0) throw new EndpointError("Invalid owner id.")
+  }
+}
 
 export default authenticate(async (input, ctx) => {
   const { operation, data } = input
   switch (operation) {
     case "update": {
-      const { key, value } = data
+      const { key, value } = data ?? {}
       if (!Object.hasOwn(validate, key)) throw new EndpointError("Unknown setting.")
       validate[key](value)
 
       await db.insert(settings).values({ key, value }).onConflictDoUpdate({ target: settings.key, set: { value } }).run()
       const res = await db.select().from(settings).where(eq(settings.key, key)).get()
 
-      if (data.key === "owner") {
+      if (key === "owner") {
         me ??= await api.getMe()
         await Promise.allSettled([
           api.setChatMenuButton({
@@ -27,7 +42,7 @@ export default authenticate(async (input, ctx) => {
             menu_button: { type: "default" }
           }),
           api.setChatMenuButton({
-            chat_id: data.value,
+            chat_id: value,
             menu_button: {
               type: "web_app",
               text: "Dash",
