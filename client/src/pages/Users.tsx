@@ -167,19 +167,21 @@ export function Component() {
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-between gap-2 text-sm">
-        <span className="whitespace-nowrap text-muted-foreground">
-          Page <span className="font-mono">{pageIndex + 1}</span> of <span className="font-mono">{Math.max(table.getPageCount(), 1)}</span>
-        </span>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="font-mono" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
-            Prev
-          </Button>
-          <Button variant="outline" size="sm" className="font-mono" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-            Next
-          </Button>
+      {table.getPageCount() > 1 && (
+        <div className="flex items-center justify-between gap-2 text-sm">
+          <span className="whitespace-nowrap text-muted-foreground">
+            Page <span className="font-mono">{pageIndex + 1}</span> of <span className="font-mono">{Math.max(table.getPageCount(), 1)}</span>
+          </span>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" className="font-mono" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
+              Prev
+            </Button>
+            <Button variant="outline" size="sm" className="font-mono" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+              Next
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }
