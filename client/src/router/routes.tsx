@@ -12,5 +12,5 @@ export const routes: RouteObject[] = [
   {
     path: "/settings",
     lazy: () => import("@/pages/Settings")
-  },
+  }
 ]
