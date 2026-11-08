@@ -3,6 +3,7 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { ArrowUpDown, ChevronsUpDown, ExternalLink } from "lucide-react"
 import { useUsers, type User } from "@/stores/users"
+import { useSettings } from "@/stores/settings"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
@@ -80,7 +81,7 @@ const columns = helper.columns([
   helper.accessor("created_at", {
     meta: { title: "Joined" },
     header: ({ column }) => <SortHeader column={column} />,
-    cell: ({ getValue }) => <span className="font-mono">{new Date(getValue()).toLocaleString([], { dateStyle: "medium", timeStyle: "short", hour12: true })}</span>,
+    cell: ({ getValue }) => <span className="font-mono">{new Date(getValue()).toLocaleString([], { dateStyle: "medium", timeStyle: "short", hour12: true, timeZone: useSettings.getState().settings?.timezone })}</span>,
     sortFn: "basic",
     enableGlobalFilter: false
   }),
