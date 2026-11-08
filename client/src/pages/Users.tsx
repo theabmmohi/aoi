@@ -1,6 +1,5 @@
 import { columnFilteringFeature, columnVisibilityFeature, createColumnHelper, createFilteredRowModel, createPaginatedRowModel, createSortedRowModel, filterFn_includesString, globalFilteringFeature, rowPaginationFeature, rowSortingFeature, sortFn_alphanumeric, sortFn_basic, sortFn_text, tableFeatures, useTable, type Column, type ColumnVisibilityState, type SortingState } from "@tanstack/react-table"
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { ArrowUpDown, ChevronsUpDown, ExternalLink } from "lucide-react"
 import { useUsers, type User } from "@/stores/users"
@@ -94,14 +93,6 @@ const columns = helper.columns([
     enableGlobalFilter: false
   })
 ])
-const pageSizes = [10, 25, 50].map((n) => ({
-  value: String(n),
-  label: (
-    <>
-      <span className="font-mono">{n}</span> per page
-    </>
-  )
-}))
 
 export function Component() {
   const users = useUsers((s) => s.users) ?? []
@@ -115,13 +106,14 @@ export function Component() {
     data: users,
     getRowId,
     globalFilterFn: "includesString",
+    initialState: { pagination: { pageIndex: 0, pageSize: 25 } },
     onSortingChange: setSorting,
     onGlobalFilterChange: setGlobalFilter,
     onColumnVisibilityChange: setColumnVisibility,
     state: { sorting, globalFilter, columnVisibility }
   })
 
-  const { pageIndex, pageSize } = table.state.pagination
+  const { pageIndex } = table.state.pagination
 
   return (
     <div className="space-y-3">
@@ -175,25 +167,11 @@ export function Component() {
           </TableBody>
         </Table>
       </div>
-      <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 text-sm">
-        <div className="flex">
-          <Select items={pageSizes} value={String(pageSize)} onValueChange={(value) => table.setPageSize(Number(value))}>
-            <SelectTrigger size="sm" aria-label="Rows per page">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {pageSizes.map((size) => (
-                <SelectItem key={size.value} value={size.value}>
-                  {size.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <span className="text-center whitespace-nowrap text-muted-foreground">
-          {pageIndex + 1} of {Math.max(table.getPageCount(), 1)}
+      <div className="flex items-center justify-between gap-2 text-sm">
+        <span className="whitespace-nowrap text-muted-foreground">
+          Page <span className="font-mono">{pageIndex + 1}</span> of <span className="font-mono">{Math.max(table.getPageCount(), 1)}</span>
         </span>
-        <div className="flex items-center justify-end gap-2">
+        <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" className="font-mono" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
             Prev
           </Button>
