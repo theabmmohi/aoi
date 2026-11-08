@@ -1,6 +1,6 @@
 import { authenticate } from "../lib/endpoints/auth.js"
+import { settings, users } from "../schema.js"
 import { api, db, EndpointError } from "sdk"
-import { settings } from "../schema.js"
 import { eq } from "sdk/db"
 
 let me
@@ -18,8 +18,11 @@ const validate = {
       throw new EndpointError("Invalid timezone.")
     }
   },
-  owner(value) {
+  async owner(value) {
     if (!Number.isSafeInteger(value) || value <= 0) throw new EndpointError("Invalid owner id.")
+    if (key === "owner" && value === ctx.owner.id) throw new EndpointError("You already own this dashboard.")
+    const known = await db.select().from(users).where(eq(users.id, value)).get()
+    if (!known) throw new EndpointError("That user has not started the bot.")
   }
 }
 
@@ -29,7 +32,7 @@ export default authenticate(async (input, ctx) => {
     case "update": {
       const { key, value } = data ?? {}
       if (!Object.hasOwn(validate, key)) throw new EndpointError("Unknown setting.")
-      validate[key](value)
+      await validate[key](value)
 
       await db.insert(settings).values({ key, value }).onConflictDoUpdate({ target: settings.key, set: { value } }).run()
       const res = await db.select().from(settings).where(eq(settings.key, key)).get()
@@ -37,10 +40,12 @@ export default authenticate(async (input, ctx) => {
       if (key === "owner") {
         me ??= await api.getMe()
         await Promise.allSettled([
+          api.sendMessage({ chat_id: ctx.owner.id, text: `Ownership transferred to <a href="tg://user?id=${value}">${value}</a>`, parse_mode: "HTML" }),
           api.setChatMenuButton({
             chat_id: ctx.owner.id,
             menu_button: { type: "default" }
           }),
+             api.sendMessage({ chat_id: value, text: "You are now the owner of this dashboard. Tap Dash to open it." }),
           api.setChatMenuButton({
             chat_id: value,
             menu_button: {
