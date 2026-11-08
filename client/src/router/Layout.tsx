@@ -92,7 +92,7 @@ export function Layout() {
         <Outlet />
       </main>
       <Yozora theme={appearance} tabs={tabs} defaultValue={"/" + location.pathname.split("/")[1]} onValueChange={(path) => navigate(path)} />
-      <Toaster theme={appearance} position="top-center" />
+      <Toaster position="top-center" theme={appearance} toastOptions={{ className: "select-none" }} />
     </>
   )
 }
