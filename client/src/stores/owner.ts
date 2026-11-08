@@ -1,6 +1,6 @@
 import { create } from "zustand"
 
-export type User = {
+export type Owner = {
   id: number
   first_name: string
   last_name?: string
@@ -8,8 +8,8 @@ export type User = {
   username?: string
 }
 
-export const useUser = create<{
-  user: User | null
+export const useOwner = create<{
+  owner: Owner | null
 }>(() => ({
-  user: null
+  owner: null
 }))

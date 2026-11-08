@@ -4,7 +4,7 @@ import { StrictMode } from "react"
 
 import { HydrateFallback } from "@/router/HydrateFallback"
 import { ErrorBoundary } from "@/router/ErrorBoundary"
-import { useUser, type User } from "@/stores/user"
+import { useOwner, type Owner } from "@/stores/owner"
 import { serverless } from "@/utils/serverless"
 import { Layout } from "@/router/Layout"
 import { routes } from "@/router/routes"
@@ -18,9 +18,9 @@ const router = createBrowserRouter([
     HydrateFallback,
     ErrorBoundary,
     loader: async () => {
-      const {data: user, error} = await serverless<User>({name: "user"})
+      const { data: owner, error } = await serverless<Owner>({ name: "owner" })
       if (error) throw error
-      useUser.setState({ user })
+      useOwner.setState({ owner })
       return null
     }
   }

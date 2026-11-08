@@ -3,7 +3,7 @@ import { Outlet, useNavigate, useLocation } from "react-router"
 import { useState, useEffect, useCallback } from "react"
 import { Sun, Moon, Contrast } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { useUser } from "@/stores/user"
+import { useOwner } from "@/stores/owner"
 import { tabs } from "@/router/tabs"
 import { Toaster } from "sonner"
 import { Yozora } from "yozora"
@@ -26,9 +26,9 @@ const icon: Record<Appearance, React.ReactNode> = {
 export function Layout() {
   const navigate = useNavigate()
   const location = useLocation()
-  const user = useUser((s) => s.user)
+  const owner = useOwner((s) => s.owner)
 
-  if (!user) throw new Error("User is not available in store.")
+  if (!owner) throw new Error("User is not available in store.")
 
   const [sysDark, setSysDark] = useState(() => window.matchMedia("(prefers-color-scheme: dark)").matches)
   const [appearance, setAppearanceState] = useState<Appearance>(() => {
@@ -70,11 +70,11 @@ export function Layout() {
               <AvatarFallback>A</AvatarFallback>
             </Avatar>
             <Avatar size="lg">
-              <AvatarImage src={user.photo_url} alt="Owner" />
-              <AvatarFallback>{[user.first_name, user.last_name].map((name) => name?.charAt(0).toUpperCase()).join("")}</AvatarFallback>
+              <AvatarImage src={owner.photo_url} alt="Owner" />
+              <AvatarFallback>{[owner.first_name, owner.last_name].map((name) => name?.charAt(0).toUpperCase()).join("")}</AvatarFallback>
             </Avatar>
           </AvatarGroup>
-          <h1 className="font-mono text-xl tracking-tight self-center">{[user.first_name, user.last_name].filter(Boolean).join(" ") || "Owner"}</h1>
+          <h1 className="font-mono text-xl tracking-tight self-center">{[owner.first_name, owner.last_name].filter(Boolean).join(" ") || "Owner"}</h1>
         </div>
         <div className="flex gap-2.5">
           <Button variant="outline" size="icon" className="self-center overflow-hidden" onClick={() => setAppearance(next[appearance])}>
