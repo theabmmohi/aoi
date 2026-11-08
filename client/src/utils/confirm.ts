@@ -3,21 +3,20 @@ function biometric(reason: string) {
     const app = window.Telegram?.WebApp
     const bm = app?.BiometricManager
     if (!app || !bm || !app.isVersionAtLeast("7.2")) return resolve(null)
-    const text = reason.slice(0, 128)
     bm.init(() => {
       if (!bm.isBiometricAvailable) return resolve(null)
-      const authenticate = () => bm.authenticate({ reason: text }, resolve)
+      const authenticate = () => bm.authenticate({ reason }, resolve)
       if (bm.isAccessGranted) authenticate()
-      else bm.requestAccess({ reason: text }, (granted) => (granted ? authenticate() : resolve(null)))
+      else bm.requestAccess({ reason }, (granted) => (granted ? authenticate() : resolve(null)))
     })
   })
 }
 
-function native(message: string) {
+function native(reason: string) {
   return new Promise<boolean>((resolve) => {
     const app = window.Telegram?.WebApp
-    if (app?.showConfirm) app.showConfirm(message, resolve)
-    else resolve(window.confirm(message))
+    if (app?.showConfirm) app.showConfirm(reason, resolve)
+    else resolve(window.confirm(reason))
   })
 }
 
