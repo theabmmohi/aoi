@@ -1,7 +1,8 @@
+const app = window.Telegram.WebApp
+
 function biometric(reason: string) {
   return new Promise<boolean | null>((resolve) => {
-    const app = window.Telegram?.WebApp
-    const bm = app?.BiometricManager
+    const bm = app.BiometricManager
     if (!app || !bm || !app.isVersionAtLeast("7.2")) return resolve(null)
     bm.init(() => {
       if (!bm.isBiometricAvailable) return resolve(null)
@@ -14,8 +15,7 @@ function biometric(reason: string) {
 
 function native(reason: string) {
   return new Promise<boolean>((resolve) => {
-    const app = window.Telegram?.WebApp
-    if (app?.showConfirm) app.showConfirm(reason, resolve)
+    if (app.showConfirm) app.showConfirm(reason, resolve)
     else resolve(window.confirm(reason))
   })
 }
