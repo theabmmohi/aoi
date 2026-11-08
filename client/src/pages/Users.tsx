@@ -1,7 +1,7 @@
 import { columnFilteringFeature, columnVisibilityFeature, createColumnHelper, createFilteredRowModel, createPaginatedRowModel, createSortedRowModel, filterFn_includesString, globalFilteringFeature, rowPaginationFeature, rowSortingFeature, sortFn_alphanumeric, sortFn_basic, sortFn_text, tableFeatures, useTable, type Column, type ColumnVisibilityState, type SortingState } from "@tanstack/react-table"
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { ArrowUpDown, ChevronsUpDown, ExternalLink } from "lucide-react"
+import { ArrowUpDown, ChevronsUpDown } from "lucide-react"
 import { useUsers, type User } from "@/stores/users"
 import { useSettings } from "@/stores/settings"
 import { Button } from "@/components/ui/button"
@@ -56,24 +56,9 @@ const columns = helper.columns([
       if (!username) return "-"
       const url = `https://t.me/${username}`
       return (
-        <span className="inline-flex items-center gap-1.5">
-          <a
-            href={url}
-            target="_blank"
-            rel="noreferrer"
-            aria-label={`Open ${username} on Telegram`}
-            onClick={(event) => {
-              const telegram = window.Telegram?.WebApp
-              if (!telegram?.openTelegramLink) return
-              event.preventDefault()
-              telegram.openTelegramLink(url)
-            }}
-            className="-m-1 p-1 text-muted-foreground hover:text-foreground"
-          >
-            <ExternalLink className="size-3.5" />
-          </a>
+        <button type="button" className="-m-1 cursor-pointer p-1 font-mono hover:underline" onClick={() => window.Telegram.WebApp.openTelegramLink(url)}>
           {username}
-        </span>
+        </button>
       )
     },
     sortFn: "text"
