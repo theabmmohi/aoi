@@ -1,3 +1,4 @@
+import { esc } from "../lib/handlers/message/helpers.js"
 import { authenticate } from "../lib/endpoints/auth.js"
 import { settings, users } from "../schema.js"
 import { api, db, EndpointError } from "sdk"
@@ -22,6 +23,7 @@ const validate = {
     if (!Number.isSafeInteger(value) || value <= 0) throw new EndpointError("Invalid owner id.")
     const known = await db.select().from(users).where(eq(users.id, value)).get()
     if (!known) throw new EndpointError("That user has not started the bot.")
+    return known
   }
 }
 
@@ -32,15 +34,17 @@ export default authenticate(async (input, ctx) => {
       const { key, value } = data ?? {}
       if (!Object.hasOwn(validate, key)) throw new EndpointError("Unknown setting.")
       if (key === "owner" && value === ctx.owner.id) throw new EndpointError("You already own this dashboard.")
-      await validate[key](value)
+      const target = await validate[key](value)
 
       await db.insert(settings).values({ key, value }).onConflictDoUpdate({ target: settings.key, set: { value } }).run()
       const res = await db.select().from(settings).where(eq(settings.key, key)).get()
 
       if (key === "owner") {
         me ??= await api.getMe()
+        const name = esc([target.first_name, target.last_name].filter(Boolean).join(" "))
+        const who = target.username ? `<a href="https://t.me/${target.username}">${name}</a>` : name
         await Promise.allSettled([
-          api.sendMessage({ chat_id: ctx.owner.id, text: `Ownership transferred to <a href="tg://user?id=${value}">${value}</a>`, parse_mode: "HTML" }),
+          api.sendMessage({ chat_id: ctx.owner.id, text: `Ownership transferred to ${who} [<code>${value}</code>]`, parse_mode: "HTML" }),
           api.setChatMenuButton({
             chat_id: ctx.owner.id,
             menu_button: { type: "default" }
