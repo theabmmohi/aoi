@@ -24,13 +24,12 @@ function ensureAccess(bm: BiometricManager, reason: string) {
   return new Promise<boolean>((resolve) => {
     const declined = bm.isAccessRequested
     let acted = false
-    toast(declined ? "Biometric access is off. Turn it on in Telegram settings, then try again." : "Allow biometric access to confirm this action.", {
+    toast(declined ? "Biometrics access is turned off." : "Allow biometrics access to confirm this action?", {
       id: "biometric-access",
       duration: Infinity,
       onDismiss: () => !acted && resolve(false),
-      cancel: { label: "Cancel", onClick: () => {} },
       action: {
-        label: declined ? "Open settings" : "Allow",
+        label: declined ? "Settings" : "Allow",
         onClick: () => {
           acted = true
           if (!declined) return bm.requestAccess({ reason }, resolve)
