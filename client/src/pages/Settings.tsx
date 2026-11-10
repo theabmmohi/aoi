@@ -15,16 +15,14 @@ export function Component() {
 
   const [applyingTZ, setApplyingTZ] = useState(false)
   const deviceTZ = Intl.DateTimeFormat().resolvedOptions().timeZone
-  const items = [
-    { label: deviceTZ, value: deviceTZ },
-    { label: "UTC", value: "UTC" }
-  ]
+  const zones = [...new Set([settings?.timezone, deviceTZ, "UTC"].filter((zone): zone is string => !!zone))]
+  const items = zones.map((zone) => ({ label: zone, value: zone }))
   async function applyTZ(value: string | null) {
+    if (!value || applyingTZ || settings?.timezone === value) return
     try {
-      if (!value || applyingTZ || settings?.timezone === value) return
       setApplyingTZ(true)
       const { data, error } = await serverless<{ key: string; value: string }>({ name: "settings", input: { operation: "update", data: { key: "timezone", value } } })
-      if (error) return toast.error(error.message)
+      if (error) return toast.error(error.message ?? "Couldn't save timezone.")
       useSettings.setState((s) => ({ settings: s.settings && { ...s.settings, [data.key]: data.value } }))
       toast.success(`Timezone set to ${value}.`)
     } finally {
@@ -55,7 +53,7 @@ export function Component() {
           <CardDescription>Set your preferred timezone for the dashboard.</CardDescription>
         </CardHeader>
         <CardContent>
-          <Select items={items} defaultValue={settings?.timezone} onValueChange={applyTZ} disabled={applyingTZ}>
+          <Select items={items} value={settings?.timezone} onValueChange={applyTZ} disabled={applyingTZ}>
             <SelectTrigger className="w-full">
               <SelectValue />
             </SelectTrigger>
